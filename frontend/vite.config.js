@@ -12,5 +12,15 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    proxy: {
+      // Dev-only: forwards to `netlify functions:serve` (see root
+      // package.json `functions:serve` script), which honors each
+      // function's `config.path` directly. Production doesn't use this —
+      // Netlify's own redirect in netlify.toml handles /api/* there.
+      '/api': {
+        target: 'http://localhost:9999',
+        changeOrigin: true,
+      },
+    },
   },
 })

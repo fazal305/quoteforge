@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { PageHeader } from '@/components/ui/EmptyState'
 import { StatusBadge } from '@/components/ui/StatusBadge'
-import { useQuote, useQuoteEvents } from '@/api/quotes'
+import { Button } from '@/components/ui/Button'
+import { useQuote, useQuoteEvents, useQuotePublicToken } from '@/api/quotes'
 import { calculateLineItem, formatMoney } from '@/lib/money'
 
 const EVENT_ICON = {
@@ -22,12 +24,22 @@ export function QuoteView() {
   const { id } = useParams()
   const { data, isLoading } = useQuote(id)
   const { data: events } = useQuoteEvents(id)
+  const { data: publicToken } = useQuotePublicToken(id)
+  const [copied, setCopied] = useState(false)
 
   if (isLoading || !data) {
     return <div className="p-6 text-sm text-neutral-500">Loading quote…</div>
   }
 
   const { quote, items } = data
+  const publicUrl = publicToken ? `${window.location.origin}/quote/${publicToken.token}` : null
+
+  async function copyLink() {
+    if (!publicUrl) return
+    await navigator.clipboard.writeText(publicUrl)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
     <div>
@@ -39,6 +51,18 @@ export function QuoteView() {
 
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 p-6 md:grid-cols-3">
         <div className="space-y-6 md:col-span-2">
+          {publicUrl && (
+            <div className="flex items-center justify-between gap-3 rounded-lg border border-neutral-200 bg-white p-3">
+              <div className="min-w-0">
+                <div className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Customer link</div>
+                <div className="truncate text-sm text-neutral-700">{publicUrl}</div>
+              </div>
+              <Button size="sm" variant="secondary" onClick={copyLink}>
+                {copied ? 'Copied!' : 'Copy link'}
+              </Button>
+            </div>
+          )}
+
           <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
             <table className="w-full text-sm">
               <thead>

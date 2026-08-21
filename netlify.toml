@@ -1,7 +1,7 @@
 [build]
   base = "frontend"
   command = "npm run build"
-  publish = "frontend/dist"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
@@ -9,6 +9,13 @@
 [functions]
   directory = "../netlify/functions"
   node_bundler = "esbuild"
+
+# Local dev doesn't use `netlify dev` (its redirect proxy interferes with
+# Vite's own asset serving in this repo's nested frontend/ + root
+# netlify/functions/ layout). Instead: `npm run dev` (Vite, port 5195) +
+# `npm run functions:serve` (root, port 9999) with Vite's dev proxy
+# forwarding /api/* to the functions server — see frontend/vite.config.js.
+# This [[redirects]] config is what production actually uses.
 
 # API routes go to Netlify Functions (functions declare their own
 # `path` in `config`, e.g. /api/health -> health.js).
