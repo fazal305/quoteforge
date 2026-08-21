@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
+import { generateSecureToken } from '@/lib/token'
 
 export function useQuotes(opts = {}) {
   const { search = '', status = 'ALL' } = opts
@@ -79,6 +80,57 @@ export function useSaveQuote() {
       queryClient.invalidateQueries({ queryKey: ['quotes'] })
       queryClient.invalidateQueries({ queryKey: ['quote', data.id] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
+    },
+  })
+}
+
+export function useQuotePublicToken(quoteId) {
+  return useQuery({
+    queryKey: ['quote-public-token', quoteId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('quote_public_tokens')
+        .select('*')
+        .eq('quote_id', quoteId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+      if (error) throw error
+      return data
+    },
+    enabled: !!quoteId,
+  })
+}
+
+// Get-or-create: reuses an existing, non-expired token for the quote
+// instead of minting a new one every time the quote is (re)sent, so a
+// previously shared link keeps working.
+export function useEnsurePublicToken() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (quoteId) => {
+      const { data: existing, error: fetchError } = await supabase
+        .from('quote_public_tokens')
+        .select('*')
+        .eq('quote_id', quoteId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+      if (fetchError) throw fetchError
+      if (existing && (!existing.expires_at || new Date(existing.expires_at) > new Date())) {
+        return existing
+      }
+
+      const { data: created, error: insertError } = await supabase
+        .from('quote_public_tokens')
+        .insert({ quote_id: quoteId, token: generateSecureToken() })
+        .select()
+        .single()
+      if (insertError) throw insertError
+      return created
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['quote-public-token', data.quote_id] })
     },
   })
 }

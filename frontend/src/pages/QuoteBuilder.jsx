@@ -9,7 +9,7 @@ import { QuoteTotals } from '@/components/quote-builder/QuoteTotals'
 import { QuotePreview } from '@/components/quote-builder/QuotePreview'
 import { useQuoteBuilder } from '@/components/quote-builder/useQuoteBuilder'
 import { useProfile } from '@/api/organization'
-import { useQuote, useTransitionQuoteStatus } from '@/api/quotes'
+import { useQuote, useTransitionQuoteStatus, useEnsurePublicToken } from '@/api/quotes'
 import { useCustomer } from '@/api/customers'
 
 export function QuoteBuilder() {
@@ -18,6 +18,7 @@ export function QuoteBuilder() {
   const { data: profile } = useProfile()
   const { data: loadedQuote, isLoading: loadingQuote } = useQuote(id)
   const transitionStatus = useTransitionQuoteStatus()
+  const ensurePublicToken = useEnsurePublicToken()
 
   const currency = profile?.organization.currency ?? 'PKR'
   const {
@@ -61,6 +62,7 @@ export function QuoteBuilder() {
       return
     }
     try {
+      const isResend = status === 'CHANGE_REQUESTED'
       const saved = await performSave()
       const targetId = quoteId ?? saved?.id
       if (!targetId) return
@@ -69,10 +71,13 @@ export function QuoteBuilder() {
         newStatus: 'SENT',
         actorType: 'USER',
         actorLabel: profile?.user.name ?? 'User',
-        message: `Quote sent to ${selectedCustomer?.name ?? 'customer'}.`,
-        eventType: 'SENT',
+        message: isResend
+          ? `Quote updated and resent to ${selectedCustomer?.name ?? 'customer'}.`
+          : `Quote sent to ${selectedCustomer?.name ?? 'customer'}.`,
+        eventType: isResend ? 'RESENT' : 'SENT',
       })
-      navigate('/quotes')
+      await ensurePublicToken.mutateAsync(targetId)
+      navigate(`/quotes/${targetId}`)
     } catch (err) {
       setSendError(err.message)
     }
@@ -89,7 +94,9 @@ export function QuoteBuilder() {
               ? 'All changes saved'
               : autosaveState === 'error'
                 ? 'Autosave failed — use Save Draft'
-                : 'Draft'
+                : status === 'CHANGE_REQUESTED'
+                  ? 'Customer requested changes — edit and resend'
+                  : 'Draft'
         }
         action={
           <div className="flex gap-2">

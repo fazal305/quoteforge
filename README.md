@@ -141,13 +141,30 @@ rotate their passwords) in Supabase Auth, and delete the seeded
 
 ### 5. Run locally
 
+Frontend only (customers, catalog, quote builder, dashboard — anything
+that doesn't call `/api/*`):
+
 ```bash
 cd frontend && npm run dev
 ```
 
-To run Netlify Functions locally alongside the frontend, install the
-Netlify CLI and run `netlify dev` from the project root instead (reads
-`netlify.toml`, proxies `/api/*` to the functions).
+Frontend **and** functions (needed for the public quote page, which calls
+`/api/public-quote` and `/api/quote-response`): run these two in separate
+terminals from the repo root.
+
+```bash
+npm install                 # installs netlify-cli (dev dependency)
+npm run functions:serve     # Netlify Functions on :9999
+cd frontend && npm run dev  # Vite on :5173, proxies /api/* to :9999
+```
+
+Note: this repo does **not** use `netlify dev` for local testing. With a
+nested `frontend/` + root-level `netlify/functions/` layout and a
+`base = "frontend"` build config, `netlify dev`'s redirect proxy ends up
+intercepting asset requests (e.g. `/src/main.jsx`) meant for Vite. The
+`functions:serve` + Vite-proxy combination above avoids that entirely and
+is what's actually used day-to-day. `netlify.toml`'s `[[redirects]]` are
+what production uses, and are unaffected by this.
 
 ## Development commands
 
@@ -156,6 +173,7 @@ Netlify CLI and run `netlify dev` from the project root instead (reads
 | `npm run dev` | `frontend/` | Start Vite dev server |
 | `npm run build` | `frontend/` | Production build |
 | `npm run lint` | `frontend/` | Lint with oxlint |
+| `npm run functions:serve` | root | Serve Netlify Functions on :9999 |
 
 ## Deployment
 
@@ -193,9 +211,13 @@ that:
 - **Phase 2 (done):** Customers, catalog, quote builder (autosave, local
   draft recovery, catalog-item prefill, atomic save + numbering via RPC),
   quote lifecycle transitions, activity timeline, dashboard.
-- **Phase 3 (current):** Public quote page, view tracking, approve/reject/
-  request changes.
-- **Phase 4:** Invoice conversion, payment tracking, activity history.
+- **Phase 3 (done):** Public quote page (`/quote/:token`) served through
+  dedicated Netlify Functions (no Supabase session for customers), view
+  tracking, approve/reject/request-changes with server-validated status
+  transitions and minimal approval metadata (name, IP, user agent —
+  approval only).
+- **Phase 4 (current):** Invoice conversion, payment tracking, activity
+  history.
 - **Phase 5:** AI Quote Assistant (OpenRouter, structured + validated
   output, human-in-the-loop).
 - **Phase 6:** Responsive/accessibility polish, PDF generation, loading
