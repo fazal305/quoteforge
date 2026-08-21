@@ -137,7 +137,7 @@ creates one demo organization and one user per role:
 **[DEMO CREDENTIALS — development/staging only.]** These are not real
 business accounts. Before any production deploy: delete these users (or
 rotate their passwords) in Supabase Auth, and delete the seeded
-`[PLACEHOLDER] Demo Software Agency` organization along with them.
+`FORK Software Agency` organization along with them.
 
 ### 5. Run locally
 
