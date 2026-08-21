@@ -4,7 +4,7 @@ export function QuoteTotals({ items, additionalDiscountPercent, currency }) {
   const totals = calculateQuoteTotals({ items, additionalDiscountPercent })
 
   return (
-    <div className="space-y-2 rounded-lg border border-neutral-200 bg-white p-4 text-sm">
+    <div className="space-y-2 rounded-lg border border-neutral-200 bg-neutral-0 p-4 text-sm">
       <Row label="Subtotal" value={formatMoney(totals.subtotal, currency)} />
       <Row label="Line discounts" value={`− ${formatMoney(totals.lineDiscountTotal, currency)}`} muted />
       {Number(additionalDiscountPercent) > 0 && (

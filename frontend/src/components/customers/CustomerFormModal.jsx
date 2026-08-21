@@ -84,7 +84,7 @@ export function CustomerFormModal({ open, onClose, onSubmit, initial, submitting
             id="c-notes"
             {...register('notes')}
             rows={3}
-            className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+            className="w-full rounded-md border border-neutral-300 bg-neutral-0 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
           />
         </div>
         <div className="flex justify-end gap-2 pt-2">

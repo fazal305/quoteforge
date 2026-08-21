@@ -19,7 +19,7 @@ export function Modal({ open, onClose, title, children }) {
       ref={ref}
       onClose={onClose}
       onCancel={onClose}
-      className="m-auto w-full max-w-lg rounded-lg border border-neutral-200 bg-white p-0 shadow-lg backdrop:bg-neutral-900/40"
+      className="m-auto w-full max-w-lg rounded-lg border border-neutral-200 bg-neutral-0 p-0 shadow-lg backdrop:bg-neutral-900/40"
       aria-labelledby="modal-title"
     >
       <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-3">

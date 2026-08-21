@@ -58,10 +58,56 @@
   color-scheme: light;
 }
 
+/*
+  Dark theme — overrides the same design-token variables Tailwind's
+  utilities already reference (bg-neutral-50, text-neutral-900, etc), so
+  no component needs its own dark: variants. Toggled via a `dark` class
+  on <html> (see src/store/theme.js) rather than prefers-color-scheme,
+  since this is a user-controlled toggle, not just a system default.
+*/
+.dark {
+  color-scheme: dark;
+
+  --color-neutral-0: #1b1e23;
+  --color-neutral-50: #16181c;
+  --color-neutral-100: #1e2126;
+  --color-neutral-200: #2b2f36;
+  --color-neutral-300: #3c414a;
+  --color-neutral-400: #5b6270;
+  --color-neutral-500: #838b99;
+  --color-neutral-600: #a8afba;
+  --color-neutral-700: #c7ccd3;
+  --color-neutral-800: #e2e5e9;
+  --color-neutral-900: #f4f5f7;
+
+  --color-brand-50: #1c2740;
+  --color-brand-100: #223257;
+  --color-brand-300: #6690f2;
+  --color-brand-500: #6690f2;
+  --color-brand-600: #8aa8f6;
+  --color-brand-700: #aec2f9;
+
+  --color-status-draft: #a8afba;
+  --color-status-sent: #6690f2;
+  --color-status-viewed: #a996f2;
+  --color-status-approved: #3fc384;
+  --color-status-rejected: #f0716f;
+  --color-status-changes: #e0a63e;
+  --color-status-expired: #838b99;
+  --color-status-converted: #40c9b2;
+  --color-status-paid: #3fc384;
+  --color-status-overdue: #f0716f;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
 body {
   font-family: var(--font-sans);
   color: var(--color-neutral-900);
   background: var(--color-neutral-50);
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 /* Visible keyboard focus everywhere — accessibility requirement, not optional */

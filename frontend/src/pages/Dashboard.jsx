@@ -28,7 +28,7 @@ export function Dashboard() {
           <>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
               {PIPELINE_ORDER.map((status) => (
-                <div key={status} className="rounded-lg border border-neutral-200 bg-white p-4">
+                <div key={status} className="rounded-lg border border-neutral-200 bg-neutral-0 p-4">
                   <div className="text-xs font-medium uppercase tracking-wide text-neutral-400">
                     {status.replace('_', ' ')}
                   </div>
@@ -40,7 +40,7 @@ export function Dashboard() {
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="rounded-lg border border-neutral-200 bg-white p-4">
+              <div className="rounded-lg border border-neutral-200 bg-neutral-0 p-4">
                 <div className="text-xs font-medium uppercase tracking-wide text-neutral-400">
                   Revenue pipeline (sent + viewed)
                 </div>
@@ -48,7 +48,7 @@ export function Dashboard() {
                   {formatMoney(data.pipelineTotal, currency)}
                 </div>
               </div>
-              <div className="rounded-lg border border-neutral-200 bg-white p-4">
+              <div className="rounded-lg border border-neutral-200 bg-neutral-0 p-4">
                 <div className="text-xs font-medium uppercase tracking-wide text-neutral-400">
                   Outstanding invoices
                   {data.overdueCount > 0 && <span className="ml-1 text-red-600">({data.overdueCount} overdue)</span>}
@@ -57,7 +57,7 @@ export function Dashboard() {
                   {formatMoney(data.outstandingTotal, currency)}
                 </div>
               </div>
-              <div className="rounded-lg border border-neutral-200 bg-white p-4">
+              <div className="rounded-lg border border-neutral-200 bg-neutral-0 p-4">
                 <div className="text-xs font-medium uppercase tracking-wide text-neutral-400">Paid to date</div>
                 <div className="mt-1 text-2xl font-semibold text-neutral-900">{formatMoney(data.paidTotal, currency)}</div>
               </div>
@@ -83,7 +83,7 @@ export function Dashboard() {
             <div>
               <h2 className="mb-3 text-sm font-semibold text-neutral-900">Recent quotes</h2>
               {data.recentQuotes.length === 0 ? (
-                <div className="rounded-lg border border-dashed border-neutral-300 bg-white p-8 text-center text-sm text-neutral-500">
+                <div className="rounded-lg border border-dashed border-neutral-300 bg-neutral-0 p-8 text-center text-sm text-neutral-500">
                   No quotes yet.{' '}
                   <Link to="/quotes/new" className="text-brand-600 hover:underline">
                     Create your first quote
@@ -91,7 +91,7 @@ export function Dashboard() {
                   .
                 </div>
               ) : (
-                <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-white">
+                <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-neutral-0">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-neutral-200 text-left text-neutral-500">

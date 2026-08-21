@@ -87,7 +87,7 @@ export function Catalog() {
         )}
 
         {!isLoading && items && items.length > 0 && (
-          <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-white">
+          <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-neutral-0">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-neutral-200 text-left text-neutral-500">

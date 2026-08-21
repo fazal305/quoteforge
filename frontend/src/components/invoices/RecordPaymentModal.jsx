@@ -80,7 +80,7 @@ export function RecordPaymentModal({ open, onClose, onSubmit, maxAmount, submitt
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={2}
-            className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm"
+            className="w-full rounded-md border border-neutral-300 bg-neutral-0 px-3 py-2 text-sm"
           />
         </div>
         <FieldError message={error} />

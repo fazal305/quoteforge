@@ -128,7 +128,7 @@ export function QuoteBuilder() {
           <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">{sendError}</div>
         )}
 
-        <div className="rounded-lg border border-neutral-200 bg-white p-4">
+        <div className="rounded-lg border border-neutral-200 bg-neutral-0 p-4">
           <label className="mb-1 block text-sm font-medium text-neutral-700">Customer *</label>
           {profile && (
             <CustomerSelect
@@ -147,7 +147,7 @@ export function QuoteBuilder() {
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div className="space-y-4">
-            <div className="rounded-lg border border-neutral-200 bg-white p-4">
+            <div className="rounded-lg border border-neutral-200 bg-neutral-0 p-4">
               <label className="mb-1 block text-sm font-medium text-neutral-700">Additional discount (%)</label>
               <Input
                 type="number"
@@ -158,7 +158,7 @@ export function QuoteBuilder() {
                 onChange={(e) => setState((s) => ({ ...s, additionalDiscountPercent: Number(e.target.value) }))}
               />
             </div>
-            <div className="rounded-lg border border-neutral-200 bg-white p-4">
+            <div className="rounded-lg border border-neutral-200 bg-neutral-0 p-4">
               <label className="mb-1 block text-sm font-medium text-neutral-700">Quote validity (expires)</label>
               <Input
                 type="date"
@@ -166,23 +166,23 @@ export function QuoteBuilder() {
                 onChange={(e) => setState((s) => ({ ...s, validUntil: e.target.value }))}
               />
             </div>
-            <div className="rounded-lg border border-neutral-200 bg-white p-4">
+            <div className="rounded-lg border border-neutral-200 bg-neutral-0 p-4">
               <label className="mb-1 block text-sm font-medium text-neutral-700">Terms & conditions</label>
               <textarea
                 value={state.terms}
                 onChange={(e) => setState((s) => ({ ...s, terms: e.target.value }))}
                 rows={4}
                 placeholder={profile?.organization.default_terms ? 'Using business default terms — edit here to override' : ''}
-                className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm"
+                className="w-full rounded-md border border-neutral-300 bg-neutral-0 px-3 py-2 text-sm"
               />
             </div>
-            <div className="rounded-lg border border-neutral-200 bg-white p-4">
+            <div className="rounded-lg border border-neutral-200 bg-neutral-0 p-4">
               <label className="mb-1 block text-sm font-medium text-neutral-700">Additional notes</label>
               <textarea
                 value={state.notes}
                 onChange={(e) => setState((s) => ({ ...s, notes: e.target.value }))}
                 rows={3}
-                className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm"
+                className="w-full rounded-md border border-neutral-300 bg-neutral-0 px-3 py-2 text-sm"
               />
             </div>
           </div>

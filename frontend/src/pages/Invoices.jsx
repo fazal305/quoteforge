@@ -29,7 +29,7 @@ export function Invoices() {
             value={status}
             onChange={(e) => setStatus(e.target.value)}
             aria-label="Filter by status"
-            className="h-10 rounded-md border border-neutral-300 bg-white px-3 text-sm"
+            className="h-10 rounded-md border border-neutral-300 bg-neutral-0 px-3 text-sm"
           >
             {STATUS_FILTERS.map((s) => (
               <option key={s} value={s}>
@@ -54,7 +54,7 @@ export function Invoices() {
         )}
 
         {!isLoading && invoices && invoices.length > 0 && (
-          <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-white">
+          <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-neutral-0">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-neutral-200 text-left text-neutral-500">
