@@ -189,12 +189,13 @@ that:
 
 ## Roadmap
 
-- **Phase 1 (current):** Project foundation, design system, routing, auth
+- **Phase 1 (done):** Project foundation, design system, routing, auth
   shell, database schema.
-- **Phase 2:** Customers, catalog, quote builder, calculations, quote
-  lifecycle, dashboard.
-- **Phase 3:** Public quote page, view tracking, approve/reject/request
-  changes.
+- **Phase 2 (done):** Customers, catalog, quote builder (autosave, local
+  draft recovery, catalog-item prefill, atomic save + numbering via RPC),
+  quote lifecycle transitions, activity timeline, dashboard.
+- **Phase 3 (current):** Public quote page, view tracking, approve/reject/
+  request changes.
 - **Phase 4:** Invoice conversion, payment tracking, activity history.
 - **Phase 5:** AI Quote Assistant (OpenRouter, structured + validated
   output, human-in-the-loop).

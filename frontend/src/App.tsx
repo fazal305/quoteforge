@@ -4,6 +4,8 @@ import { ProtectedRoute } from '@/components/layout/ProtectedRoute'
 import { Login } from '@/pages/Login'
 import { Dashboard } from '@/pages/Dashboard'
 import { Quotes } from '@/pages/Quotes'
+import { QuoteBuilder } from '@/pages/QuoteBuilder'
+import { QuoteView } from '@/pages/QuoteView'
 import { Customers } from '@/pages/Customers'
 import { Catalog } from '@/pages/Catalog'
 import { Invoices } from '@/pages/Invoices'
@@ -22,6 +24,9 @@ export function App() {
           <Route element={<AppShell />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/quotes" element={<Quotes />} />
+            <Route path="/quotes/new" element={<QuoteBuilder />} />
+            <Route path="/quotes/:id/edit" element={<QuoteBuilder />} />
+            <Route path="/quotes/:id" element={<QuoteView />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/invoices" element={<Invoices />} />
