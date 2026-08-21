@@ -5,9 +5,9 @@ send a secure public link to customers (no account required), customers
 approve / reject / request changes, and approved quotes convert into invoices
 with payment tracking.
 
-**Status:** Phases 1–3 complete (foundation, core business features, and
-the public customer quote/approval workflow). Phase 4 — invoice
-conversion and payment tracking — is in progress. See Roadmap below.
+**Status:** Phases 1–4 complete (foundation, core business features,
+public customer quote/approval workflow, invoice conversion and payment
+tracking). See Roadmap below.
 
 ## Product overview
 
@@ -216,8 +216,11 @@ that:
   tracking, approve/reject/request-changes with server-validated status
   transitions and minimal approval metadata (name, IP, user agent —
   approval only).
-- **Phase 4 (current):** Invoice conversion, payment tracking, activity
-  history.
+- **Phase 4 (done):** Atomic quote-to-invoice conversion (line items
+  snapshotted, quote marked converted), invoice lifecycle
+  (ISSUED/PARTIALLY_PAID/PAID), payment recording with server-computed
+  status (never client-trusted) and overpayment guard, dashboard
+  outstanding/paid totals.
 - **Phase 5:** AI Quote Assistant (OpenRouter, structured + validated
   output, human-in-the-loop).
 - **Phase 6:** Responsive/accessibility polish, PDF generation, loading

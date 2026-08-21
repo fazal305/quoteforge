@@ -9,6 +9,7 @@ import { QuoteView } from '@/pages/QuoteView'
 import { Customers } from '@/pages/Customers'
 import { Catalog } from '@/pages/Catalog'
 import { Invoices } from '@/pages/Invoices'
+import { InvoiceView } from '@/pages/InvoiceView'
 import { Settings } from '@/pages/Settings'
 import { PublicQuote } from '@/pages/PublicQuote'
 import { NotFound } from '@/pages/NotFound'
@@ -30,6 +31,7 @@ export function App() {
             <Route path="/customers" element={<Customers />} />
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/invoices" element={<Invoices />} />
+            <Route path="/invoices/:id" element={<InvoiceView />} />
             <Route path="/settings" element={<Settings />} />
           </Route>
         </Route>
