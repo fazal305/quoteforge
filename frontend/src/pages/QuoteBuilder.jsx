@@ -4,9 +4,10 @@ import { PageHeader } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { CustomerSelect } from '@/components/quote-builder/CustomerSelect'
-import { LineItemsEditor } from '@/components/quote-builder/LineItemsEditor'
+import { LineItemsEditor, newLineItem } from '@/components/quote-builder/LineItemsEditor'
 import { QuoteTotals } from '@/components/quote-builder/QuoteTotals'
 import { QuotePreview } from '@/components/quote-builder/QuotePreview'
+import { AIQuoteAssistant } from '@/components/quote-builder/AIQuoteAssistant'
 import { useQuoteBuilder } from '@/components/quote-builder/useQuoteBuilder'
 import { useProfile } from '@/api/organization'
 import { useQuote, useTransitionQuoteStatus, useEnsurePublicToken } from '@/api/quotes'
@@ -38,6 +39,7 @@ export function QuoteBuilder() {
 
   const { data: selectedCustomer } = useCustomer(state.customerId ?? undefined)
   const [previewOpen, setPreviewOpen] = useState(false)
+  const [aiAssistantOpen, setAiAssistantOpen] = useState(false)
   const [sendError, setSendError] = useState(null)
 
   if (id && loadingQuote) {
@@ -81,6 +83,27 @@ export function QuoteBuilder() {
     } catch (err) {
       setSendError(err.message)
     }
+  }
+
+  function handleAddAiItems(suggestedItems) {
+    const converted = suggestedItems.map((item) => ({
+      ...newLineItem(),
+      catalog_item_id: null,
+      name: item.name,
+      description: item.description ?? '',
+      quantity: item.quantity,
+      unit: item.unit,
+      unit_price: item.unit_price,
+      discount_percent: 0,
+      tax_percent: item.tax_percent,
+    }))
+    setState((s) => {
+      // Replace a single still-blank starter row rather than leaving an
+      // empty line item alongside the AI suggestions.
+      const isBlankStarter =
+        s.items.length === 1 && !s.items[0].name && s.items[0].quantity === 1 && s.items[0].unit_price === 0
+      return { ...s, items: isBlankStarter ? converted : [...s.items, ...converted] }
+    })
   }
 
   return (
@@ -137,6 +160,12 @@ export function QuoteBuilder() {
               onChange={(customerId) => setState((s) => ({ ...s, customerId }))}
             />
           )}
+        </div>
+
+        <div className="flex justify-end">
+          <Button type="button" variant="secondary" size="sm" onClick={() => setAiAssistantOpen(true)}>
+            ✨ Ask AI to draft items
+          </Button>
         </div>
 
         <LineItemsEditor
@@ -201,6 +230,13 @@ export function QuoteBuilder() {
           quoteNumber={loadedQuote?.quote.quote_number}
         />
       )}
+
+      <AIQuoteAssistant
+        open={aiAssistantOpen}
+        onClose={() => setAiAssistantOpen(false)}
+        onAddItems={handleAddAiItems}
+        currency={currency}
+      />
     </div>
   )
 }

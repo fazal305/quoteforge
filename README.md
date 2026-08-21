@@ -235,8 +235,11 @@ that:
   (ISSUED/PARTIALLY_PAID/PAID), payment recording with server-computed
   status (never client-trusted) and overpayment guard, dashboard
   outstanding/paid totals.
-- **Phase 5:** AI Quote Assistant (OpenRouter, structured + validated
-  output, human-in-the-loop).
+- **Phase 5 (built, awaiting a real API key to verify live):** AI Quote
+  Assistant — a Netlify Function proxies OpenRouter (key never reaches
+  the browser), validates the model's JSON output against a Zod schema
+  before it's trusted, and the suggestion only pre-fills the quote
+  builder for human review — nothing is ever saved automatically.
 - **Phase 6:** Responsive/accessibility polish, PDF generation, loading
   and error states.
 - **Phase 7:** Testing, linting, security review.
