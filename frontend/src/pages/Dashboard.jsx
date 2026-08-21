@@ -39,12 +39,27 @@ export function Dashboard() {
               ))}
             </div>
 
-            <div className="rounded-lg border border-neutral-200 bg-white p-4">
-              <div className="text-xs font-medium uppercase tracking-wide text-neutral-400">
-                Revenue pipeline (sent + viewed, awaiting decision)
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div className="rounded-lg border border-neutral-200 bg-white p-4">
+                <div className="text-xs font-medium uppercase tracking-wide text-neutral-400">
+                  Revenue pipeline (sent + viewed)
+                </div>
+                <div className="mt-1 text-2xl font-semibold text-neutral-900">
+                  {formatMoney(data.pipelineTotal, currency)}
+                </div>
               </div>
-              <div className="mt-1 text-2xl font-semibold text-neutral-900">
-                {formatMoney(data.pipelineTotal, currency)}
+              <div className="rounded-lg border border-neutral-200 bg-white p-4">
+                <div className="text-xs font-medium uppercase tracking-wide text-neutral-400">
+                  Outstanding invoices
+                  {data.overdueCount > 0 && <span className="ml-1 text-red-600">({data.overdueCount} overdue)</span>}
+                </div>
+                <div className="mt-1 text-2xl font-semibold text-neutral-900">
+                  {formatMoney(data.outstandingTotal, currency)}
+                </div>
+              </div>
+              <div className="rounded-lg border border-neutral-200 bg-white p-4">
+                <div className="text-xs font-medium uppercase tracking-wide text-neutral-400">Paid to date</div>
+                <div className="mt-1 text-2xl font-semibold text-neutral-900">{formatMoney(data.paidTotal, currency)}</div>
               </div>
             </div>
 

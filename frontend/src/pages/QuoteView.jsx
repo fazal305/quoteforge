@@ -1,9 +1,12 @@
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { PageHeader } from '@/components/ui/EmptyState'
 import { StatusBadge } from '@/components/ui/StatusBadge'
 import { Button } from '@/components/ui/Button'
+import { Modal } from '@/components/ui/Modal'
+import { Input, FieldError } from '@/components/ui/Input'
 import { useQuote, useQuoteEvents, useQuotePublicToken } from '@/api/quotes'
+import { useConvertQuoteToInvoice, useQuoteInvoice } from '@/api/invoices'
 import { calculateLineItem, formatMoney } from '@/lib/money'
 
 const EVENT_ICON = {
@@ -22,10 +25,16 @@ const EVENT_ICON = {
 
 export function QuoteView() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const { data, isLoading } = useQuote(id)
   const { data: events } = useQuoteEvents(id)
   const { data: publicToken } = useQuotePublicToken(id)
+  const { data: linkedInvoice } = useQuoteInvoice(id)
+  const convertToInvoice = useConvertQuoteToInvoice()
   const [copied, setCopied] = useState(false)
+  const [convertOpen, setConvertOpen] = useState(false)
+  const [dueDate, setDueDate] = useState('')
+  const [convertError, setConvertError] = useState('')
 
   if (isLoading || !data) {
     return <div className="p-6 text-sm text-neutral-500">Loading quote…</div>
@@ -41,12 +50,37 @@ export function QuoteView() {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  async function handleConvert(e) {
+    e.preventDefault()
+    setConvertError('')
+    try {
+      const invoice = await convertToInvoice.mutateAsync({ quoteId: quote.id, dueDate })
+      navigate(`/invoices/${invoice.id}`)
+    } catch (err) {
+      setConvertError(err.message)
+    }
+  }
+
   return (
     <div>
       <PageHeader
         title={quote.quote_number}
         description={quote.customer?.name ?? ''}
-        action={<StatusBadge status={quote.status} kind="quote" />}
+        action={
+          <div className="flex items-center gap-3">
+            {quote.status === 'APPROVED' && (
+              <Button size="sm" onClick={() => setConvertOpen(true)}>
+                Convert to invoice
+              </Button>
+            )}
+            {quote.status === 'CONVERTED' && linkedInvoice && (
+              <Link to={`/invoices/${linkedInvoice.id}`} className="text-sm text-brand-600 hover:underline">
+                View invoice {linkedInvoice.invoice_number}
+              </Link>
+            )}
+            <StatusBadge status={quote.status} kind="quote" />
+          </div>
+        }
       />
 
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 p-6 md:grid-cols-3">
@@ -127,6 +161,29 @@ export function QuoteView() {
           </ol>
         </div>
       </div>
+
+      <Modal open={convertOpen} onClose={() => setConvertOpen(false)} title="Convert to invoice">
+        <form onSubmit={handleConvert} className="space-y-4" noValidate>
+          <p className="text-sm text-neutral-600">
+            Creates an invoice from this quote's approved items and totals. The quote will be marked converted.
+          </p>
+          <div>
+            <label htmlFor="due-date" className="mb-1 block text-sm font-medium text-neutral-700">
+              Due date (optional)
+            </label>
+            <Input id="due-date" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+          </div>
+          <FieldError message={convertError} />
+          <div className="flex justify-end gap-2 pt-2">
+            <Button type="button" variant="secondary" onClick={() => setConvertOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={convertToInvoice.isPending}>
+              {convertToInvoice.isPending ? 'Converting…' : 'Convert to invoice'}
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   )
 }
