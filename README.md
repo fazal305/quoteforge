@@ -124,7 +124,22 @@ Fill in:
 In the Supabase SQL editor (or via the Supabase CLI), run the migrations in
 `supabase/migrations/` in order, starting with `0001_init.sql`.
 
-### 4. Run locally
+### 4. Demo login credentials (development only)
+
+Running `node supabase/seed/seed-dev-users.mjs` (with root `.env` filled in)
+creates one demo organization and one user per role:
+
+| Role | Email | Password |
+|---|---|---|
+| `BUSINESS_OWNER` | `owner@quoteforge.dev` | `QuoteForge-Owner-123!` |
+| `STAFF` | `staff@quoteforge.dev` | `QuoteForge-Staff-123!` |
+
+**[DEMO CREDENTIALS — development/staging only.]** These are not real
+business accounts. Before any production deploy: delete these users (or
+rotate their passwords) in Supabase Auth, and delete the seeded
+`[PLACEHOLDER] Demo Software Agency` organization along with them.
+
+### 5. Run locally
 
 ```bash
 cd frontend && npm run dev
