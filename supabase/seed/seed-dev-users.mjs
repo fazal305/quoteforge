@@ -38,7 +38,7 @@ if (!url || !serviceRoleKey) {
 const admin = createClient(url, serviceRoleKey, { auth: { persistSession: false } })
 
 const DEMO_ORG = {
-  name: '[PLACEHOLDER] Demo Software Agency',
+  name: 'FORK Software Agency',
   currency: 'PKR',
   primary_color: '#3b6df0',
   secondary_color: '#14171b',
