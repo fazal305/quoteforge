@@ -5,6 +5,9 @@ send a secure public link to customers (no account required), customers
 approve / reject / request changes, and approved quotes convert into invoices
 with payment tracking.
 
+**Live demo:** [quoteforge-604.netlify.app](https://quoteforge-604.netlify.app)
+— log in with the [demo credentials](#4-demo-login-credentials-development-only) below. This is a working development deployment seeded with dummy data, not a real business.
+
 **Status:** Phases 1–4 complete (foundation, core business features,
 public customer quote/approval workflow, invoice conversion and payment
 tracking). See Roadmap below.
@@ -158,13 +161,13 @@ npm run functions:serve     # Netlify Functions on :9999
 cd frontend && npm run dev  # Vite on :5173, proxies /api/* to :9999
 ```
 
-Note: this repo does **not** use `netlify dev` for local testing. With a
-nested `frontend/` + root-level `netlify/functions/` layout and a
-`base = "frontend"` build config, `netlify dev`'s redirect proxy ends up
-intercepting asset requests (e.g. `/src/main.jsx`) meant for Vite. The
-`functions:serve` + Vite-proxy combination above avoids that entirely and
-is what's actually used day-to-day. `netlify.toml`'s `[[redirects]]` are
-what production uses, and are unaffected by this.
+Note: this repo does **not** use `netlify dev` for local testing. With
+this repo's nested `frontend/` + root-level `netlify/functions/` layout,
+`netlify dev`'s redirect proxy ends up intercepting asset requests (e.g.
+`/src/main.jsx`) meant for Vite. The `functions:serve` + Vite-proxy
+combination above avoids that entirely and is what's actually used
+day-to-day. `netlify.toml`'s `[[redirects]]` are what production uses,
+and are unaffected by this.
 
 ## Development commands
 
@@ -181,16 +184,27 @@ what production uses, and are unaffected by this.
 
 1. Push to the GitHub repository (see Git workflow below).
 2. Connect the repo in Netlify, or run `netlify deploy --prod`. Netlify
-   reads `netlify.toml` for the build command (`npm run build` from
-   `frontend/`), publish directory (`frontend/dist`), and functions
-   directory (`netlify/functions`).
+   reads `netlify.toml` for the build command (`npm --prefix frontend
+   run build`), publish directory (`frontend/dist`), and functions
+   directory (`netlify/functions`). No `base` directory is set — earlier
+   attempts using `base = "frontend"` broke Netlify's functions-directory
+   path validation (`../netlify/functions` was rejected as outside the
+   repo root) — root-relative paths avoid that entirely.
 3. In Netlify Site settings → Environment variables, set the same keys as
    `.env` (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `OPENROUTER_API_KEY`)
    plus `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` for the frontend
-   build.
+   build. **Do not mark `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` as
+   "Contains secret values"** — Netlify redacts secret-flagged variables
+   (replaces characters with `•`) when a *function* reads them at runtime,
+   which breaks any Supabase call from `netlify/functions/*`. The two
+   `VITE_*` build-time-only vars are unaffected and can stay secret-flagged.
+   (If a variable was already created as secret, Netlify won't let you
+   un-check that in place — delete it and re-add it without the checkbox.)
 4. Verify the production build: load the site, confirm client-side routing
-   works on a hard refresh of a nested route (SPA fallback), and hit
-   `/api/health` to confirm functions + env vars are wired.
+   works on a hard refresh of a nested route (SPA fallback), hit
+   `/api/health` to confirm functions + env vars are wired, and load a
+   real `/quote/:token` link end-to-end (exercises the Supabase
+   service-role path specifically, which the health check alone doesn't).
 
 ## Git workflow
 
