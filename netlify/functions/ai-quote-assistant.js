@@ -58,8 +58,17 @@ export default async (req, _context) => {
     return json({ error: 'Method not allowed' }, 405)
   }
 
-  const apiKey = (process.env.OPENROUTER_API_KEY || '').trim()
-  if (!apiKey) {
+  // Deliberately NOT named OPENROUTER_API_KEY: Netlify's AI Gateway
+  // auto-injects its own gateway JWT into any env var name matching a
+  // known AI provider pattern for accounts with AI usage enabled — even
+  // if we never set a value ourselves — which silently replaces a real
+  // OpenRouter key too. QUOTEFORGE_AI_KEY sidesteps that pattern match.
+  const apiKey = (process.env.QUOTEFORGE_AI_KEY || '').trim()
+  // Defense in depth: a JWT-shaped value here would still mean the
+  // Gateway intercepted it somehow — treat that the same as unconfigured
+  // rather than sending it to OpenRouter for a confusing generic failure.
+  const looksLikeJwt = apiKey.split('.').length === 3 && apiKey.startsWith('eyJ')
+  if (!apiKey || looksLikeJwt) {
     return json(
       { error: 'The AI Quote Assistant is not configured yet. An administrator needs to add an OpenRouter API key.' },
       501

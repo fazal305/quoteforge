@@ -120,7 +120,7 @@ Fill in:
 - `frontend/.env` — `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (Supabase
   project → Settings → API). These are safe to expose to the client.
 - `.env` — `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` (**secret**, never
-  commit or expose to the frontend), and later `OPENROUTER_API_KEY`.
+  commit or expose to the frontend), and later `QUOTEFORGE_AI_KEY`.
 
 ### 3. Database setup
 
@@ -191,7 +191,7 @@ and are unaffected by this.
    path validation (`../netlify/functions` was rejected as outside the
    repo root) — root-relative paths avoid that entirely.
 3. In Netlify Site settings → Environment variables, set the same keys as
-   `.env` (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `OPENROUTER_API_KEY`)
+   `.env` (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `QUOTEFORGE_AI_KEY`)
    plus `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` for the frontend
    build. **Do not mark `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` as
    "Contains secret values"** — Netlify redacts secret-flagged variables
@@ -200,6 +200,11 @@ and are unaffected by this.
    `VITE_*` build-time-only vars are unaffected and can stay secret-flagged.
    (If a variable was already created as secret, Netlify won't let you
    un-check that in place — delete it and re-add it without the checkbox.)
+   `QUOTEFORGE_AI_KEY` holds a real OpenRouter API key — it's deliberately
+   *not* named `OPENROUTER_API_KEY`, because Netlify's AI Gateway (for
+   accounts with AI usage enabled) auto-injects its own gateway JWT into
+   any env var name matching a known AI provider pattern, silently
+   overriding whatever real value you set there.
 4. Verify the production build: load the site, confirm client-side routing
    works on a hard refresh of a nested route (SPA fallback), hit
    `/api/health` to confirm functions + env vars are wired, and load a
