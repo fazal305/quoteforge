@@ -24,9 +24,9 @@ Every status transition is recorded as a human-readable activity event
 
 ## Architecture
 
-- **Frontend:** React + Vite + TypeScript, React Router, TanStack Query,
-  Zustand, Tailwind CSS, React Hook Form + Zod.
-- **Backend:** Netlify Functions (TypeScript), using the Supabase
+- **Frontend:** React + Vite + JavaScript (JSX), React Router, TanStack
+  Query, Zustand, Tailwind CSS, React Hook Form + Zod.
+- **Backend:** Netlify Functions (JavaScript), using the Supabase
   service-role key for operations that need to bypass RLS (public quote
   access, AI assistant proxy, PDF generation).
 - **Database/Auth:** Supabase (Postgres + Row Level Security for tenant
@@ -71,7 +71,7 @@ only customer-safe fields.
 | Forms | React Hook Form + Zod | Schema-validated forms, shared validation with backend |
 | Styling | Tailwind CSS v4 | Design tokens via `@theme`, no scattered inline styles |
 | Money math | decimal.js | Avoids float rounding errors in quote/invoice totals |
-| Backend | Netlify Functions (TS) | Single deploy target with Netlify hosting |
+| Backend | Netlify Functions (JS) | Single deploy target with Netlify hosting |
 | Database | Supabase Postgres | Managed Postgres + RLS + Auth in one provider |
 
 ## Project structure
@@ -82,9 +82,9 @@ quoteforge/
 │  └─ src/
 │     ├─ pages/            Route-level screens
 │     ├─ components/       ui/ (primitives), layout/, quote-builder/
-│     ├─ lib/               money.ts (calculation utils), supabase.ts
-│     ├─ store/             Zustand stores (auth, ...)
-│     └─ types/             Shared domain types
+│     ├─ lib/               money.js (calculation utils), supabase.js
+│     ├─ api/               React Query hooks per resource (customers, quotes, ...)
+│     └─ store/             Zustand stores (auth, ...)
 ├─ netlify/functions/       Backend API (Netlify Functions)
 ├─ supabase/migrations/     SQL schema + RLS policies
 └─ netlify.toml             Build, redirects, SPA fallback, security headers
@@ -154,9 +154,8 @@ Netlify CLI and run `netlify dev` from the project root instead (reads
 | Command | Location | Purpose |
 |---|---|---|
 | `npm run dev` | `frontend/` | Start Vite dev server |
-| `npm run build` | `frontend/` | Type-check + production build |
-| `npx tsc -b --noEmit` | `frontend/` | Type-check only |
-| `npm run typecheck` | root | Type-check Netlify Functions |
+| `npm run build` | `frontend/` | Production build |
+| `npm run lint` | `frontend/` | Lint with oxlint |
 
 ## Deployment
 

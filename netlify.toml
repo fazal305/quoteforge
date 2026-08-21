@@ -11,7 +11,7 @@
   node_bundler = "esbuild"
 
 # API routes go to Netlify Functions (functions declare their own
-# `path` in `config`, e.g. /api/health -> health.ts).
+# `path` in `config`, e.g. /api/health -> health.js).
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"

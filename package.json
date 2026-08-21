@@ -4,17 +4,10 @@
   "private": true,
   "description": "QuoteForge Netlify Functions (backend API).",
   "type": "module",
-  "scripts": {
-    "typecheck": "tsc --noEmit"
-  },
   "dependencies": {
     "@netlify/functions": "^6.0.0",
     "@supabase/supabase-js": "^2.112.3",
     "decimal.js": "^10.6.0",
     "zod": "^4.4.3"
-  },
-  "devDependencies": {
-    "@types/node": "^26.2.0",
-    "typescript": "^7.0.2"
   }
 }
