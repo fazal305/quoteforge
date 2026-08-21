@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { calculateLineItem, formatMoney } from '@/lib/money'
+import { downloadQuotePdf } from '@/lib/pdf'
 import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
 import { Input, FieldError } from '@/components/ui/Input'
@@ -28,6 +29,8 @@ export function PublicQuote() {
   const [loadState, setLoadState] = useState('loading')
   const [errorMessage, setErrorMessage] = useState('')
   const [actionModal, setActionModal] = useState(null)
+  const [pdfLoading, setPdfLoading] = useState(false)
+  const [pdfError, setPdfError] = useState('')
 
   useEffect(() => {
     let cancelled = false
@@ -79,6 +82,18 @@ export function PublicQuote() {
   const accent = organization?.primary_color || '#3b6df0'
   const isReadOnly = READ_ONLY_STATUSES.has(quote.status)
 
+  async function handleDownloadPdf() {
+    setPdfError('')
+    setPdfLoading(true)
+    try {
+      await downloadQuotePdf({ quote, items, organization: organization ?? {}, customer: customer ?? { name: 'Customer' } })
+    } catch (err) {
+      setPdfError(err.message)
+    } finally {
+      setPdfLoading(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-neutral-50 px-4 py-8 sm:py-12">
       <div className="mx-auto max-w-3xl rounded-lg border border-neutral-200 bg-neutral-0 shadow-sm">
@@ -98,11 +113,24 @@ export function PublicQuote() {
               {quote.valid_until && (
                 <div className="text-sm text-neutral-500">Valid until {new Date(quote.valid_until).toLocaleDateString()}</div>
               )}
+              <button
+                type="button"
+                onClick={handleDownloadPdf}
+                disabled={pdfLoading}
+                className="mt-2 text-sm font-medium hover:underline disabled:opacity-60"
+                style={{ color: accent }}
+              >
+                {pdfLoading ? 'Preparing PDF…' : 'Download PDF'}
+              </button>
             </div>
           </div>
         </div>
 
         <div className="p-6 sm:p-8">
+          {pdfError && (
+            <div className="mb-6 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">{pdfError}</div>
+          )}
+
           {isReadOnly && (
             <div
               className="mb-6 rounded-md border p-3 text-sm"

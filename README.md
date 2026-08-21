@@ -245,8 +245,11 @@ that:
   the browser), validates the model's JSON output against a Zod schema
   before it's trusted, and the suggestion only pre-fills the quote
   builder for human review — nothing is ever saved automatically.
-- **Phase 6:** Responsive/accessibility polish, PDF generation, loading
-  and error states.
+- **Phase 6 (in progress):** PDF generation done — a stateless Netlify
+  Function (`@react-pdf/renderer`) turns already-fetched, already-
+  authorized quote data into a professional PDF, shared by both the
+  business view and the public customer view. Responsive/accessibility
+  polish and loading/error-state audit still to do.
 - **Phase 7:** Testing, linting, security review.
 - **Phase 8:** GitHub push + Netlify deployment verification.
 
