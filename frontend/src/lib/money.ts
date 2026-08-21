@@ -7,11 +7,13 @@ import Decimal from 'decimal.js'
  * rounding errors (e.g. 0.1 + 0.2 !== 0.3) on currency math.
  */
 
+// snake_case to match the DB row shape (quote_items/invoice_items columns)
+// used throughout the app — avoids a naming translation layer.
 export interface LineItemInput {
   quantity: number | string
-  unitPrice: number | string
-  discountPercent?: number | string
-  taxPercent?: number | string
+  unit_price: number | string
+  discount_percent?: number | string
+  tax_percent?: number | string
 }
 
 export interface LineItemTotals {
@@ -27,9 +29,9 @@ const toDecimal = (value: number | string | undefined, fallback = 0): Decimal =>
 
 export function calculateLineItem(item: LineItemInput): LineItemTotals {
   const quantity = toDecimal(item.quantity)
-  const unitPrice = toDecimal(item.unitPrice)
-  const discountPercent = toDecimal(item.discountPercent, 0)
-  const taxPercent = toDecimal(item.taxPercent, 0)
+  const unitPrice = toDecimal(item.unit_price)
+  const discountPercent = toDecimal(item.discount_percent, 0)
+  const taxPercent = toDecimal(item.tax_percent, 0)
 
   const lineSubtotal = quantity.times(unitPrice)
   const lineDiscount = lineSubtotal.times(discountPercent).dividedBy(100)
