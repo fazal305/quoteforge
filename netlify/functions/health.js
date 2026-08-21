@@ -8,7 +8,7 @@ export default async (_req, _context) => {
       ok: true,
       hasSupabaseUrl: Boolean(process.env.SUPABASE_URL),
       hasSupabaseServiceKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
-      hasOpenRouterKey: Boolean(process.env.OPENROUTER_API_KEY),
+      hasOpenRouterKey: Boolean(process.env.QUOTEFORGE_AI_KEY),
     }),
     { headers: { 'content-type': 'application/json' } }
   )
