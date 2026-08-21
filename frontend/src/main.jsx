@@ -2,6 +2,7 @@ import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './index.css'
+import '@/store/theme' // applies the dark/light class before first paint
 import { App } from './App'
 import { useAuthStore } from '@/store/auth'
 

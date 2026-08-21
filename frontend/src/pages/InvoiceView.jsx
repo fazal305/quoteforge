@@ -56,7 +56,7 @@ export function InvoiceView() {
             </div>
           )}
 
-          <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
+          <div className="overflow-hidden rounded-lg border border-neutral-200 bg-neutral-0">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-neutral-200 text-left text-neutral-500">
@@ -87,7 +87,7 @@ export function InvoiceView() {
             </table>
           </div>
 
-          <div className="ml-auto max-w-xs space-y-1 rounded-lg border border-neutral-200 bg-white p-4 text-sm">
+          <div className="ml-auto max-w-xs space-y-1 rounded-lg border border-neutral-200 bg-neutral-0 p-4 text-sm">
             <Row label="Subtotal" value={formatMoney(invoice.subtotal, invoice.currency)} />
             <Row label="Discount" value={`− ${formatMoney(invoice.discount_total, invoice.currency)}`} />
             <Row label="Tax" value={formatMoney(invoice.tax_total, invoice.currency)} />
@@ -108,7 +108,7 @@ export function InvoiceView() {
           ) : (
             <ul className="space-y-3">
               {payments.map((p) => (
-                <li key={p.id} className="rounded-lg border border-neutral-200 bg-white p-3">
+                <li key={p.id} className="rounded-lg border border-neutral-200 bg-neutral-0 p-3">
                   <div className="flex justify-between text-sm font-medium text-neutral-900">
                     <span>{formatMoney(p.amount, invoice.currency)}</span>
                     <span className="text-neutral-500">{new Date(p.paid_at).toLocaleDateString()}</span>

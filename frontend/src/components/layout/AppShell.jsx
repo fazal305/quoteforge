@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import clsx from 'clsx'
 import { useAuthStore } from '@/store/auth'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Dashboard', end: true },
@@ -16,9 +17,10 @@ export function AppShell() {
 
   return (
     <div className="flex min-h-screen bg-neutral-50">
-      <aside className="flex w-56 shrink-0 flex-col border-r border-neutral-200 bg-white">
-        <div className="flex h-14 items-center border-b border-neutral-200 px-4">
+      <aside className="flex w-56 shrink-0 flex-col border-r border-neutral-200 bg-neutral-0">
+        <div className="flex h-14 items-center justify-between border-b border-neutral-200 px-4">
           <span className="text-sm font-semibold tracking-tight text-neutral-900">QuoteForge</span>
+          <ThemeToggle />
         </div>
         <nav className="flex-1 space-y-0.5 p-2" aria-label="Primary">
           {NAV_ITEMS.map((item) => (

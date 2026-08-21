@@ -67,11 +67,7 @@ export function Settings() {
       <PageHeader title="Business Settings" description="Branding, contact information, and default quote terms." />
 
       <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-2xl space-y-6 p-6" noValidate>
-        <div className="rounded-lg border border-neutral-200 bg-white p-4">
-          <div className="mb-3 rounded-md border border-dashed border-neutral-300 bg-neutral-50 p-3 text-xs text-neutral-500">
-            [PLACEHOLDER — LOGO UPLOAD] Logo upload will be added once file storage validation (type/size limits) is
-            implemented.
-          </div>
+        <div className="rounded-lg border border-neutral-200 bg-neutral-0 p-4">
           <div className="space-y-4">
             <div>
               <label htmlFor="s-name" className="mb-1 block text-sm font-medium text-neutral-700">
@@ -110,7 +106,7 @@ export function Settings() {
           </div>
         </div>
 
-        <div className="rounded-lg border border-neutral-200 bg-white p-4">
+        <div className="rounded-lg border border-neutral-200 bg-neutral-0 p-4">
           <h3 className="mb-3 text-sm font-semibold text-neutral-900">Quote defaults</h3>
           <div className="space-y-4">
             <div>
@@ -127,7 +123,7 @@ export function Settings() {
                 id="s-terms"
                 {...register('default_terms')}
                 rows={4}
-                className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm"
+                className="w-full rounded-md border border-neutral-300 bg-neutral-0 px-3 py-2 text-sm"
               />
             </div>
             <div>
@@ -139,7 +135,7 @@ export function Settings() {
                 {...register('payment_instructions')}
                 rows={3}
                 placeholder="[PLACEHOLDER — bank details / payment instructions]"
-                className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm"
+                className="w-full rounded-md border border-neutral-300 bg-neutral-0 px-3 py-2 text-sm"
               />
             </div>
             <div>
@@ -151,7 +147,7 @@ export function Settings() {
           </div>
         </div>
 
-        <div className="rounded-lg border border-neutral-200 bg-white p-4">
+        <div className="rounded-lg border border-neutral-200 bg-neutral-0 p-4">
           <h3 className="mb-3 text-sm font-semibold text-neutral-900">Brand colors</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>

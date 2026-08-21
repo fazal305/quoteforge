@@ -86,7 +86,7 @@ export function QuoteView() {
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 p-6 md:grid-cols-3">
         <div className="space-y-6 md:col-span-2">
           {publicUrl && (
-            <div className="flex items-center justify-between gap-3 rounded-lg border border-neutral-200 bg-white p-3">
+            <div className="flex items-center justify-between gap-3 rounded-lg border border-neutral-200 bg-neutral-0 p-3">
               <div className="min-w-0">
                 <div className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Customer link</div>
                 <div className="truncate text-sm text-neutral-700">{publicUrl}</div>
@@ -97,7 +97,7 @@ export function QuoteView() {
             </div>
           )}
 
-          <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
+          <div className="overflow-hidden rounded-lg border border-neutral-200 bg-neutral-0">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-neutral-200 text-left text-neutral-500">
@@ -128,7 +128,7 @@ export function QuoteView() {
             </table>
           </div>
 
-          <div className="ml-auto max-w-xs space-y-1 rounded-lg border border-neutral-200 bg-white p-4 text-sm">
+          <div className="ml-auto max-w-xs space-y-1 rounded-lg border border-neutral-200 bg-neutral-0 p-4 text-sm">
             <Row label="Subtotal" value={formatMoney(quote.subtotal, quote.currency)} />
             <Row label="Discount" value={`− ${formatMoney(quote.discount_total, quote.currency)}`} />
             <Row label="Tax" value={formatMoney(quote.tax_total, quote.currency)} />
@@ -138,7 +138,7 @@ export function QuoteView() {
           </div>
 
           {quote.terms && (
-            <div className="rounded-lg border border-neutral-200 bg-white p-4 text-sm">
+            <div className="rounded-lg border border-neutral-200 bg-neutral-0 p-4 text-sm">
               <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-neutral-400">Terms & conditions</div>
               <div className="whitespace-pre-line text-neutral-600">{quote.terms}</div>
             </div>

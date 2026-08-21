@@ -81,7 +81,7 @@ export function PublicQuote() {
 
   return (
     <div className="min-h-screen bg-neutral-50 px-4 py-8 sm:py-12">
-      <div className="mx-auto max-w-3xl rounded-lg border border-neutral-200 bg-white shadow-sm">
+      <div className="mx-auto max-w-3xl rounded-lg border border-neutral-200 bg-neutral-0 shadow-sm">
         <div className="border-b border-neutral-200 p-6 sm:p-8">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
             <div>
@@ -311,7 +311,7 @@ function ResponseModal({ action, token, quoteNumber, onClose, onSuccess }) {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={3}
-              className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm"
+              className="w-full rounded-md border border-neutral-300 bg-neutral-0 px-3 py-2 text-sm"
             />
           </div>
         )}

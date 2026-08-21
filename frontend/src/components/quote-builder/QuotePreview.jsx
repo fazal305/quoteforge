@@ -6,7 +6,7 @@ export function QuotePreview({ open, onClose, state, organization, customer, quo
 
   return (
     <Modal open={open} onClose={onClose} title="Quote preview">
-      <div className="max-h-[70vh] overflow-y-auto rounded-md border border-neutral-200 bg-white p-6 text-sm">
+      <div className="max-h-[70vh] overflow-y-auto rounded-md border border-neutral-200 bg-neutral-0 p-6 text-sm">
         <div className="mb-6 flex items-start justify-between">
           <div>
             <div className="text-lg font-semibold text-neutral-900">{organization.name}</div>

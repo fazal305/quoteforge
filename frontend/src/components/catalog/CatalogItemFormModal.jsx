@@ -91,7 +91,7 @@ export function CatalogItemFormModal({ open, onClose, onSubmit, initial, submitt
             id="i-description"
             {...register('description')}
             rows={2}
-            className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+            className="w-full rounded-md border border-neutral-300 bg-neutral-0 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
           />
         </div>
         <div className="grid grid-cols-2 gap-4">

@@ -52,7 +52,7 @@ export function LineItemsEditor({ items, onChange, currency }) {
   }
 
   return (
-    <div className="rounded-lg border border-neutral-200 bg-white">
+    <div className="rounded-lg border border-neutral-200 bg-neutral-0">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>

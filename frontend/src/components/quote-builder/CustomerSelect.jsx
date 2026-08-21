@@ -27,7 +27,7 @@ export function CustomerSelect({ organizationId, value, onChange }) {
         value={value ?? ''}
         onChange={(e) => onChange(e.target.value)}
         aria-label="Customer"
-        className="h-10 flex-1 rounded-md border border-neutral-300 bg-white px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+        className="h-10 flex-1 rounded-md border border-neutral-300 bg-neutral-0 px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
       >
         <option value="" disabled>
           Select a customer…
