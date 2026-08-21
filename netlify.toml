@@ -1,0 +1,34 @@
+[build]
+  base = "frontend"
+  command = "npm run build"
+  publish = "frontend/dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[functions]
+  directory = "../netlify/functions"
+  node_bundler = "esbuild"
+
+# API routes go to Netlify Functions (functions declare their own
+# `path` in `config`, e.g. /api/health -> health.ts).
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# SPA fallback — client-side routing (React Router) for everything else,
+# but the public quote page and app routes are all handled by the same
+# single-page app, so this must come after the /api/* redirect above.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
