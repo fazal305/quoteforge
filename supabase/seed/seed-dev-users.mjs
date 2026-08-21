@@ -37,12 +37,22 @@ if (!url || !serviceRoleKey) {
 
 const admin = createClient(url, serviceRoleKey, { auth: { persistSession: false } })
 
+// Dummy data — fake but plausible-looking, using a .test domain (reserved
+// for testing per RFC 2606) so it's never mistaken for a real address.
 const DEMO_ORG = {
   name: 'FORK Software Agency',
+  address: '221B Tech Park Road, Gulberg III, Lahore, Pakistan',
+  phone: '+92 300 1234567',
+  email: 'hello@forksoftware.test',
+  website: 'https://forksoftware.test',
   currency: 'PKR',
   primary_color: '#3b6df0',
   secondary_color: '#14171b',
-  footer_text: '[PLACEHOLDER — replace in Settings before real use]',
+  footer_text: 'Thank you for your business!',
+  default_terms:
+    'Quotation valid for 30 days from the date of issue. 50% advance payment required to begin work, remaining balance due on completion. Delivery timelines are estimates and may vary based on project scope changes.',
+  payment_instructions:
+    'Bank transfer to FORK Software Agency — Account #0123456789, MCB Bank, Gulberg Branch, Lahore. Please include the invoice number as payment reference.',
 }
 
 const DEMO_USERS = [
