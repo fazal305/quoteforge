@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "@netlify/functions": "^6.0.0",
+    "@react-pdf/renderer": "^4.6.1",
     "@supabase/supabase-js": "^2.112.3",
     "decimal.js": "^10.6.0",
+    "react": "^19.2.8",
     "zod": "^4.4.3"
   },
   "devDependencies": {

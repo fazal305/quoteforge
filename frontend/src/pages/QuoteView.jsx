@@ -7,7 +7,9 @@ import { Modal } from '@/components/ui/Modal'
 import { Input, FieldError } from '@/components/ui/Input'
 import { useQuote, useQuoteEvents, useQuotePublicToken } from '@/api/quotes'
 import { useConvertQuoteToInvoice, useQuoteInvoice } from '@/api/invoices'
+import { useProfile } from '@/api/organization'
 import { calculateLineItem, formatMoney } from '@/lib/money'
+import { downloadQuotePdf } from '@/lib/pdf'
 
 const EVENT_ICON = {
   CREATED: '＋',
@@ -30,11 +32,14 @@ export function QuoteView() {
   const { data: events } = useQuoteEvents(id)
   const { data: publicToken } = useQuotePublicToken(id)
   const { data: linkedInvoice } = useQuoteInvoice(id)
+  const { data: profile } = useProfile()
   const convertToInvoice = useConvertQuoteToInvoice()
   const [copied, setCopied] = useState(false)
   const [convertOpen, setConvertOpen] = useState(false)
   const [dueDate, setDueDate] = useState('')
   const [convertError, setConvertError] = useState('')
+  const [pdfError, setPdfError] = useState('')
+  const [pdfLoading, setPdfLoading] = useState(false)
 
   if (isLoading || !data) {
     return <div className="p-6 text-sm text-neutral-500">Loading quote…</div>
@@ -48,6 +53,24 @@ export function QuoteView() {
     await navigator.clipboard.writeText(publicUrl)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  async function handleDownloadPdf() {
+    if (!profile) return
+    setPdfError('')
+    setPdfLoading(true)
+    try {
+      await downloadQuotePdf({
+        quote,
+        items,
+        organization: profile.organization,
+        customer: quote.customer ?? { name: 'Customer' },
+      })
+    } catch (err) {
+      setPdfError(err.message)
+    } finally {
+      setPdfLoading(false)
+    }
   }
 
   async function handleConvert(e) {
@@ -68,6 +91,9 @@ export function QuoteView() {
         description={quote.customer?.name ?? ''}
         action={
           <div className="flex items-center gap-3">
+            <Button size="sm" variant="secondary" onClick={handleDownloadPdf} disabled={pdfLoading || !profile}>
+              {pdfLoading ? 'Preparing PDF…' : 'Download PDF'}
+            </Button>
             {quote.status === 'APPROVED' && (
               <Button size="sm" onClick={() => setConvertOpen(true)}>
                 Convert to invoice
@@ -85,6 +111,10 @@ export function QuoteView() {
 
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 p-6 md:grid-cols-3">
         <div className="space-y-6 md:col-span-2">
+          {pdfError && (
+            <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">{pdfError}</div>
+          )}
+
           {publicUrl && (
             <div className="flex items-center justify-between gap-3 rounded-lg border border-neutral-200 bg-neutral-0 p-3">
               <div className="min-w-0">
