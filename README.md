@@ -5,9 +5,9 @@ send a secure public link to customers (no account required), customers
 approve / reject / request changes, and approved quotes convert into invoices
 with payment tracking.
 
-**Status:** Phase 1 — Foundation (project scaffold, design system, routing,
-auth foundation, database schema). Core business features (customers,
-catalog, quote builder, dashboard) land in Phase 2.
+**Status:** Phases 1–3 complete (foundation, core business features, and
+the public customer quote/approval workflow). Phase 4 — invoice
+conversion and payment tracking — is in progress. See Roadmap below.
 
 ## Product overview
 
@@ -194,7 +194,7 @@ what production uses, and are unaffected by this.
 
 ## Git workflow
 
-The repository is **public** (per project owner's instruction). Because of
+The repository is **public** . Because of
 that:
 
 - `.env`, `.env.local`, and anything matching `.env.*` are gitignored —
