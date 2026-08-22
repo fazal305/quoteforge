@@ -112,7 +112,7 @@ export function QuoteView() {
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 p-6 md:grid-cols-3">
         <div className="space-y-6 md:col-span-2">
           {pdfError && (
-            <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">{pdfError}</div>
+            <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700" role="alert">{pdfError}</div>
           )}
 
           {publicUrl && (

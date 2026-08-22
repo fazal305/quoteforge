@@ -110,6 +110,7 @@ export function QuoteBuilder() {
     <div>
       <PageHeader
         title={loadedQuote?.quote.quote_number ?? 'New quotation'}
+        liveDescription
         description={
           autosaveState === 'saving'
             ? 'Saving…'
@@ -148,7 +149,7 @@ export function QuoteBuilder() {
         )}
 
         {sendError && (
-          <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">{sendError}</div>
+          <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700" role="alert">{sendError}</div>
         )}
 
         <div className="rounded-lg border border-neutral-200 bg-neutral-0 p-4">
