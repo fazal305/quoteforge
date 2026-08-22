@@ -17,7 +17,7 @@ export function QuoteBuilder() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { data: profile } = useProfile()
-  const { data: loadedQuote, isLoading: loadingQuote } = useQuote(id)
+  const { data: loadedQuote, isLoading: loadingQuote, error: loadError } = useQuote(id)
   const transitionStatus = useTransitionQuoteStatus()
   const ensurePublicToken = useEnsurePublicToken()
 
@@ -44,6 +44,14 @@ export function QuoteBuilder() {
 
   if (id && loadingQuote) {
     return <div className="p-6 text-sm text-neutral-500">Loading quote…</div>
+  }
+
+  if (id && (loadError || !loadedQuote)) {
+    return (
+      <div className="p-6 text-sm text-red-700" role="alert">
+        {loadError ? `Failed to load quote: ${loadError.message}` : 'This quote could not be found.'}
+      </div>
+    )
   }
 
   const canEdit = status === 'DRAFT' || status === 'CHANGE_REQUESTED'

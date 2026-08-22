@@ -9,12 +9,20 @@ import { calculateLineItem, formatMoney } from '@/lib/money'
 
 export function InvoiceView() {
   const { id } = useParams()
-  const { data, isLoading } = useInvoice(id)
+  const { data, isLoading, error } = useInvoice(id)
   const recordPayment = useRecordPayment()
   const [paymentModalOpen, setPaymentModalOpen] = useState(false)
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return <div className="p-6 text-sm text-neutral-500">Loading invoice…</div>
+  }
+
+  if (error || !data) {
+    return (
+      <div className="p-6 text-sm text-red-700" role="alert">
+        {error ? `Failed to load invoice: ${error.message}` : 'This invoice could not be found.'}
+      </div>
+    )
   }
 
   const { invoice, items, payments } = data

@@ -28,7 +28,7 @@ const EVENT_ICON = {
 export function QuoteView() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { data, isLoading } = useQuote(id)
+  const { data, isLoading, error: loadError } = useQuote(id)
   const { data: events } = useQuoteEvents(id)
   const { data: publicToken } = useQuotePublicToken(id)
   const { data: linkedInvoice } = useQuoteInvoice(id)
@@ -41,8 +41,16 @@ export function QuoteView() {
   const [pdfError, setPdfError] = useState('')
   const [pdfLoading, setPdfLoading] = useState(false)
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return <div className="p-6 text-sm text-neutral-500">Loading quote…</div>
+  }
+
+  if (loadError || !data) {
+    return (
+      <div className="p-6 text-sm text-red-700" role="alert">
+        {loadError ? `Failed to load quote: ${loadError.message}` : 'This quote could not be found.'}
+      </div>
+    )
   }
 
   const { quote, items } = data
