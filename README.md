@@ -245,12 +245,16 @@ that:
   the browser), validates the model's JSON output against a Zod schema
   before it's trusted, and the suggestion only pre-fills the quote
   builder for human review — nothing is ever saved automatically.
-- **Phase 6 (in progress):** PDF generation done — a stateless Netlify
-  Function (`@react-pdf/renderer`) turns already-fetched, already-
-  authorized quote data into a professional PDF, shared by both the
-  business view and the public customer view. Responsive/accessibility
-  polish and loading/error-state audit still to do.
-- **Phase 7:** Testing, linting, security review.
+- **Phase 6 (done):** PDF generation — a stateless Netlify Function
+  (`@react-pdf/renderer`) turns already-fetched, already-authorized quote
+  data into a professional PDF, shared by both the business view and the
+  public customer view. Responsive mobile navigation (slide-in drawer
+  below `md`, fixing a real horizontal-overflow bug it surfaced).
+  Accessibility: `role="alert"` on every error banner, `aria-live` for
+  autosave status. Loading/error-state audit caught and fixed a real bug
+  where three pages hung on "Loading..." forever on a fetch failure
+  instead of showing an error.
+- **Phase 7 (current):** Testing, linting, security review.
 - **Phase 8:** GitHub push + Netlify deployment verification.
 
 ## Security notes
