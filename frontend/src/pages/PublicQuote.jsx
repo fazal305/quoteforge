@@ -128,7 +128,7 @@ export function PublicQuote() {
 
         <div className="p-6 sm:p-8">
           {pdfError && (
-            <div className="mb-6 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">{pdfError}</div>
+            <div className="mb-6 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700" role="alert">{pdfError}</div>
           )}
 
           {isReadOnly && (

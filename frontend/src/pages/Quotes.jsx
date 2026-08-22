@@ -52,7 +52,7 @@ export function Quotes() {
 
         {isLoading && <div className="p-6 text-sm text-neutral-500">Loading quotes…</div>}
         {error && (
-          <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
             Failed to load quotes: {error.message}
           </div>
         )}

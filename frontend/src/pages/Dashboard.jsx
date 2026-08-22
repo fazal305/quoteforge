@@ -19,7 +19,7 @@ export function Dashboard() {
       <div className="space-y-6 p-6">
         {isLoading && <div className="text-sm text-neutral-500">Loading dashboard…</div>}
         {error && (
-          <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
             Failed to load dashboard: {error.message}
           </div>
         )}
