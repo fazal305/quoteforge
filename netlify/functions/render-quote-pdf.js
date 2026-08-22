@@ -7,11 +7,15 @@ import { calculateLineItem, formatMoney } from './_lib/money.js'
 // Netlify's function file-discovery doesn't recognize .jsx as a valid
 // function entry point, so JSX here would silently 404 instead of erroring.
 
+// This endpoint is intentionally unauthenticated (public quote customers
+// need it too — see the module docstring below), so every field is
+// length- and count-bounded as a resource-exhaustion guard: nothing here
+// should let a request force an arbitrarily large or slow PDF render.
 const itemSchema = z.object({
-  name: z.string(),
-  description: z.string().nullable().optional(),
+  name: z.string().max(200),
+  description: z.string().max(1000).nullable().optional(),
   quantity: z.union([z.number(), z.string()]),
-  unit: z.string(),
+  unit: z.string().max(50),
   unit_price: z.union([z.number(), z.string()]),
   discount_percent: z.union([z.number(), z.string()]).optional().default(0),
   tax_percent: z.union([z.number(), z.string()]).optional().default(0),
@@ -19,33 +23,33 @@ const itemSchema = z.object({
 
 const bodySchema = z.object({
   quote: z.object({
-    quote_number: z.string(),
-    status: z.string(),
-    currency: z.string(),
+    quote_number: z.string().max(50),
+    status: z.string().max(30),
+    currency: z.string().max(10),
     subtotal: z.union([z.number(), z.string()]),
     discount_total: z.union([z.number(), z.string()]),
     tax_total: z.union([z.number(), z.string()]),
     total: z.union([z.number(), z.string()]),
-    valid_until: z.string().nullable().optional(),
-    notes: z.string().nullable().optional(),
-    terms: z.string().nullable().optional(),
-    created_at: z.string().optional(),
+    valid_until: z.string().max(40).nullable().optional(),
+    notes: z.string().max(4000).nullable().optional(),
+    terms: z.string().max(4000).nullable().optional(),
+    created_at: z.string().max(40).optional(),
   }),
-  items: z.array(itemSchema).min(1),
+  items: z.array(itemSchema).min(1).max(200),
   organization: z.object({
-    name: z.string(),
-    address: z.string().nullable().optional(),
-    phone: z.string().nullable().optional(),
-    email: z.string().nullable().optional(),
-    website: z.string().nullable().optional(),
-    footer_text: z.string().nullable().optional(),
-    payment_instructions: z.string().nullable().optional(),
-    primary_color: z.string().nullable().optional(),
+    name: z.string().max(200),
+    address: z.string().max(500).nullable().optional(),
+    phone: z.string().max(50).nullable().optional(),
+    email: z.string().max(200).nullable().optional(),
+    website: z.string().max(200).nullable().optional(),
+    footer_text: z.string().max(1000).nullable().optional(),
+    payment_instructions: z.string().max(2000).nullable().optional(),
+    primary_color: z.string().max(20).nullable().optional(),
   }),
   customer: z.object({
-    name: z.string(),
-    company: z.string().nullable().optional(),
-    email: z.string().nullable().optional(),
+    name: z.string().max(200),
+    company: z.string().max(200).nullable().optional(),
+    email: z.string().max(200).nullable().optional(),
   }),
 })
 
