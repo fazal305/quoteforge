@@ -6,6 +6,7 @@ frontend/node_modules/
 dist/
 frontend/dist/
 .netlify/
+.vercel/
 deno.lock
 
 # Environment variables — never commit real secrets
