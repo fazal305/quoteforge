@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { getSupabaseAdmin } from './_lib/supabaseAdmin.js'
 
 // Exported for unit testing (see ai-quote-assistant.test.js) — these
 // schemas are the actual security/correctness boundary for this endpoint,
@@ -60,6 +61,25 @@ Rules:
 export default async (req, _context) => {
   if (req.method !== 'POST') {
     return json({ error: 'Method not allowed' }, 405)
+  }
+
+  // This calls a paid third-party API on every request, so unlike the
+  // public quote endpoints it must NOT be reachable anonymously — anyone
+  // who found this URL could otherwise run up the OpenRouter bill for
+  // free. Require a valid Supabase session (any authenticated user in
+  // any org — this doesn't touch tenant data, so no org-scoping needed
+  // beyond "is this a real logged-in user").
+  const authHeader = req.headers.get('authorization') || ''
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null
+  if (!token) {
+    return json({ error: 'You must be signed in to use the AI Quote Assistant.' }, 401)
+  }
+  const {
+    data: { user },
+    error: authError,
+  } = await getSupabaseAdmin().auth.getUser(token)
+  if (authError || !user) {
+    return json({ error: 'Your session has expired. Please sign in again.' }, 401)
   }
 
   // Deliberately NOT named OPENROUTER_API_KEY: Netlify's AI Gateway
