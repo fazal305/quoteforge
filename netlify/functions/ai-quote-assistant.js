@@ -1,6 +1,10 @@
 import { z } from 'zod'
 
-const requestSchema = z.object({
+// Exported for unit testing (see ai-quote-assistant.test.js) — these
+// schemas are the actual security/correctness boundary for this endpoint,
+// so they're worth testing directly rather than only through the full
+// HTTP handler.
+export const requestSchema = z.object({
   prompt: z.string().min(10, 'Description is too short').max(2000),
   currency: z.string().min(1).max(10).optional(),
 })
@@ -8,7 +12,7 @@ const requestSchema = z.object({
 // What we require back from the model. Validated before anything touches
 // the client — an AI response is untrusted input like any other external
 // data source, not a shortcut around normal validation.
-const suggestionSchema = z.object({
+export const suggestionSchema = z.object({
   items: z
     .array(
       z.object({

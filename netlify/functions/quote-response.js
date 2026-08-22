@@ -1,7 +1,8 @@
 import { z } from 'zod'
 import { getSupabaseAdmin } from './_lib/supabaseAdmin.js'
 
-const bodySchema = z.object({
+// Exported for unit testing (see quote-response.test.js).
+export const bodySchema = z.object({
   token: z.string().min(1),
   action: z.enum(['APPROVE', 'REJECT', 'CHANGE_REQUEST']),
   customerName: z.string().min(1).max(200),
