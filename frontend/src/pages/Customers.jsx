@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PageHeader, EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -18,6 +18,13 @@ export function Customers() {
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState(null)
   const [deleting, setDeleting] = useState(null)
+  const [savedMessage, setSavedMessage] = useState('')
+
+  useEffect(() => {
+    if (!savedMessage) return
+    const timer = setTimeout(() => setSavedMessage(''), 3000)
+    return () => clearTimeout(timer)
+  }, [savedMessage])
 
   function openCreate() {
     setEditing(null)
@@ -40,8 +47,10 @@ export function Customers() {
     }
     if (editing) {
       await updateCustomer.mutateAsync({ id: editing.id, updates: cleaned })
+      setSavedMessage('Customer updated.')
     } else if (profile) {
       await createCustomer.mutateAsync({ ...cleaned, organization_id: profile.organization.id })
+      setSavedMessage('Customer added.')
     }
     setModalOpen(false)
   }
@@ -49,6 +58,7 @@ export function Customers() {
   async function handleDelete() {
     if (!deleting) return
     await deleteCustomer.mutateAsync(deleting.id)
+    setSavedMessage('Customer deleted.')
     setDeleting(null)
   }
 
@@ -56,7 +66,8 @@ export function Customers() {
     <div>
       <PageHeader
         title="Customers"
-        description="Businesses and contacts you send quotes to."
+        description={savedMessage || 'Businesses and contacts you send quotes to.'}
+        liveDescription
         action={<Button size="sm" onClick={openCreate}>New customer</Button>}
       />
 

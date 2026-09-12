@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { PageHeader } from '@/components/ui/EmptyState'
 import { StatusBadge } from '@/components/ui/StatusBadge'
@@ -12,6 +12,13 @@ export function InvoiceView() {
   const { data, isLoading, error } = useInvoice(id)
   const recordPayment = useRecordPayment()
   const [paymentModalOpen, setPaymentModalOpen] = useState(false)
+  const [savedMessage, setSavedMessage] = useState('')
+
+  useEffect(() => {
+    if (!savedMessage) return
+    const timer = setTimeout(() => setSavedMessage(''), 3000)
+    return () => clearTimeout(timer)
+  }, [savedMessage])
 
   if (isLoading) {
     return <div className="p-6 text-sm text-neutral-500">Loading invoice…</div>
@@ -40,6 +47,7 @@ export function InvoiceView() {
       reference: values.reference || null,
       notes: values.notes || null,
     })
+    setSavedMessage('Payment recorded.')
     setPaymentModalOpen(false)
   }
 
@@ -47,7 +55,8 @@ export function InvoiceView() {
     <div>
       <PageHeader
         title={invoice.invoice_number}
-        description={invoice.customer?.name ?? ''}
+        description={savedMessage || invoice.customer?.name || ''}
+        liveDescription
         action={
           <div className="flex items-center gap-3">
             {canRecordPayment && <Button size="sm" onClick={() => setPaymentModalOpen(true)}>Record payment</Button>}
