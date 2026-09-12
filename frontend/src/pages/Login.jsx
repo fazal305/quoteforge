@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Navigate, useLocation } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { useAuthStore } from '@/store/auth'
 import { Button } from '@/components/ui/Button'
@@ -7,10 +7,18 @@ import { Input, FieldError } from '@/components/ui/Input'
 
 export function Login() {
   const status = useAuthStore((s) => s.status)
+  const clearSessionExpired = useAuthStore((s) => s.clearSessionExpired)
+  const location = useLocation()
+  const [sessionExpired] = useState(() => Boolean(location.state?.sessionExpired))
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
+
+  useEffect(() => {
+    if (sessionExpired) clearSessionExpired()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (status === 'authenticated') {
     return <Navigate to="/" replace />
@@ -32,6 +40,12 @@ export function Login() {
       <div className="w-full max-w-sm rounded-lg border border-neutral-200 bg-neutral-0 p-8 shadow-sm">
         <h1 className="text-lg font-semibold text-neutral-900">Sign in to QuoteForge</h1>
         <p className="mt-1 text-sm text-neutral-500">Manage quotes, customers, and invoices.</p>
+
+        {sessionExpired && (
+          <div className="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800" role="alert">
+            Your session has expired — please log in again.
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
           <div>
