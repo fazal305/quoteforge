@@ -1,13 +1,13 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import path from 'path'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import path from "path";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@': path.resolve(import.meta.dirname, './src'),
+      "@": path.resolve(import.meta.dirname, "./src"),
     },
   },
   server: {
@@ -17,10 +17,10 @@ export default defineConfig({
       // package.json `functions:serve` script), which honors each
       // function's `config.path` directly. Production doesn't use this —
       // Netlify's own redirect in netlify.toml handles /api/* there.
-      '/api': {
-        target: 'http://localhost:9999',
+      "/api": {
+        target: "http://localhost:9999",
         changeOrigin: true,
       },
     },
   },
-})
+});
