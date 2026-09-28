@@ -1,39 +1,44 @@
-import { useEffect, useState } from 'react'
-import { PageHeader, EmptyState } from '@/components/ui/EmptyState'
-import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { CustomerFormModal } from '@/components/customers/CustomerFormModal'
-import { useCustomers, useCreateCustomer, useUpdateCustomer, useDeleteCustomer } from '@/api/customers'
-import { useProfile } from '@/api/organization'
+import { useEffect, useState } from "react";
+import { PageHeader, EmptyState } from "@/components/ui/EmptyState";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { CustomerFormModal } from "@/components/customers/CustomerFormModal";
+import {
+  useCustomers,
+  useCreateCustomer,
+  useUpdateCustomer,
+  useDeleteCustomer,
+} from "@/api/customers";
+import { useProfile } from "@/api/organization";
 
 export function Customers() {
-  const [search, setSearch] = useState('')
-  const { data: profile } = useProfile()
-  const { data: customers, isLoading, error } = useCustomers(search)
-  const createCustomer = useCreateCustomer()
-  const updateCustomer = useUpdateCustomer()
-  const deleteCustomer = useDeleteCustomer()
+  const [search, setSearch] = useState("");
+  const { data: profile } = useProfile();
+  const { data: customers, isLoading, error } = useCustomers(search);
+  const createCustomer = useCreateCustomer();
+  const updateCustomer = useUpdateCustomer();
+  const deleteCustomer = useDeleteCustomer();
 
-  const [modalOpen, setModalOpen] = useState(false)
-  const [editing, setEditing] = useState(null)
-  const [deleting, setDeleting] = useState(null)
-  const [savedMessage, setSavedMessage] = useState('')
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editing, setEditing] = useState(null);
+  const [deleting, setDeleting] = useState(null);
+  const [savedMessage, setSavedMessage] = useState("");
 
   useEffect(() => {
-    if (!savedMessage) return
-    const timer = setTimeout(() => setSavedMessage(''), 3000)
-    return () => clearTimeout(timer)
-  }, [savedMessage])
+    if (!savedMessage) return;
+    const timer = setTimeout(() => setSavedMessage(""), 3000);
+    return () => clearTimeout(timer);
+  }, [savedMessage]);
 
   function openCreate() {
-    setEditing(null)
-    setModalOpen(true)
+    setEditing(null);
+    setModalOpen(true);
   }
 
   function openEdit(customer) {
-    setEditing(customer)
-    setModalOpen(true)
+    setEditing(customer);
+    setModalOpen(true);
   }
 
   async function handleSubmit(values) {
@@ -44,31 +49,40 @@ export function Customers() {
       phone: values.phone || null,
       address: values.address || null,
       notes: values.notes || null,
-    }
+    };
     if (editing) {
-      await updateCustomer.mutateAsync({ id: editing.id, updates: cleaned })
-      setSavedMessage('Customer updated.')
+      await updateCustomer.mutateAsync({ id: editing.id, updates: cleaned });
+      setSavedMessage("Customer updated.");
     } else if (profile) {
-      await createCustomer.mutateAsync({ ...cleaned, organization_id: profile.organization.id })
-      setSavedMessage('Customer added.')
+      await createCustomer.mutateAsync({
+        ...cleaned,
+        organization_id: profile.organization.id,
+      });
+      setSavedMessage("Customer added.");
     }
-    setModalOpen(false)
+    setModalOpen(false);
   }
 
   async function handleDelete() {
-    if (!deleting) return
-    await deleteCustomer.mutateAsync(deleting.id)
-    setSavedMessage('Customer deleted.')
-    setDeleting(null)
+    if (!deleting) return;
+    await deleteCustomer.mutateAsync(deleting.id);
+    setSavedMessage("Customer deleted.");
+    setDeleting(null);
   }
 
   return (
     <div>
       <PageHeader
         title="Customers"
-        description={savedMessage || 'Businesses and contacts you send quotes to.'}
+        description={
+          savedMessage || "Businesses and contacts you send quotes to."
+        }
         liveDescription
-        action={<Button size="sm" onClick={openCreate}>New customer</Button>}
+        action={
+          <Button size="sm" onClick={openCreate}>
+            New customer
+          </Button>
+        }
       />
 
       <div className="p-6">
@@ -81,22 +95,33 @@ export function Customers() {
           />
         </div>
 
-        {isLoading && <div className="p-6 text-sm text-neutral-500">Loading customers…</div>}
+        {isLoading && (
+          <div className="p-6 text-sm text-neutral-500">Loading customers…</div>
+        )}
         {error && (
-          <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
+          <div
+            className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+            role="alert"
+          >
             Failed to load customers: {error.message}
           </div>
         )}
 
         {!isLoading && !error && customers?.length === 0 && (
           <EmptyState
-            title={search ? 'No matching customers' : 'No customers yet'}
+            title={search ? "No matching customers" : "No customers yet"}
             description={
               search
-                ? 'Try a different search term.'
-                : 'Add your first customer to start creating quotes for them.'
+                ? "Try a different search term."
+                : "Add your first customer to start creating quotes for them."
             }
-            action={!search && <Button size="sm" onClick={openCreate}>New customer</Button>}
+            action={
+              !search && (
+                <Button size="sm" onClick={openCreate}>
+                  New customer
+                </Button>
+              )
+            }
           />
         )}
 
@@ -114,11 +139,22 @@ export function Customers() {
               </thead>
               <tbody>
                 {customers.map((c) => (
-                  <tr key={c.id} className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50">
-                    <td className="px-4 py-2.5 font-medium text-neutral-900">{c.name}</td>
-                    <td className="px-4 py-2.5 text-neutral-600">{c.company || '—'}</td>
-                    <td className="px-4 py-2.5 text-neutral-600">{c.email || '—'}</td>
-                    <td className="px-4 py-2.5 text-neutral-600">{c.phone || '—'}</td>
+                  <tr
+                    key={c.id}
+                    className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50"
+                  >
+                    <td className="px-4 py-2.5 font-medium text-neutral-900">
+                      {c.name}
+                    </td>
+                    <td className="px-4 py-2.5 text-neutral-600">
+                      {c.company || "—"}
+                    </td>
+                    <td className="px-4 py-2.5 text-neutral-600">
+                      {c.email || "—"}
+                    </td>
+                    <td className="px-4 py-2.5 text-neutral-600">
+                      {c.phone || "—"}
+                    </td>
                     <td className="px-4 py-2.5 text-right">
                       <button
                         onClick={() => openEdit(c)}
@@ -126,7 +162,10 @@ export function Customers() {
                       >
                         Edit
                       </button>
-                      <button onClick={() => setDeleting(c)} className="text-red-600 hover:underline">
+                      <button
+                        onClick={() => setDeleting(c)}
+                        className="text-red-600 hover:underline"
+                      >
                         Delete
                       </button>
                     </td>
@@ -157,5 +196,5 @@ export function Customers() {
         loading={deleteCustomer.isPending}
       />
     </div>
-  )
+  );
 }

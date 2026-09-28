@@ -1,55 +1,70 @@
-import { useEffect, useState } from 'react'
-import { Navigate, useLocation } from 'react-router-dom'
-import { supabase } from '@/lib/supabase'
-import { useAuthStore } from '@/store/auth'
-import { Button } from '@/components/ui/Button'
-import { Input, FieldError } from '@/components/ui/Input'
+import { useEffect, useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { supabase } from "@/lib/supabase";
+import { useAuthStore } from "@/store/auth";
+import { Button } from "@/components/ui/Button";
+import { Input, FieldError } from "@/components/ui/Input";
 
 export function Login() {
-  const status = useAuthStore((s) => s.status)
-  const clearSessionExpired = useAuthStore((s) => s.clearSessionExpired)
-  const location = useLocation()
-  const [sessionExpired] = useState(() => Boolean(location.state?.sessionExpired))
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState(null)
-  const [submitting, setSubmitting] = useState(false)
+  const status = useAuthStore((s) => s.status);
+  const clearSessionExpired = useAuthStore((s) => s.clearSessionExpired);
+  const location = useLocation();
+  const [sessionExpired] = useState(() =>
+    Boolean(location.state?.sessionExpired),
+  );
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (sessionExpired) clearSessionExpired()
+    if (sessionExpired) clearSessionExpired();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
-  if (status === 'authenticated') {
-    return <Navigate to="/" replace />
+  if (status === "authenticated") {
+    return <Navigate to="/" replace />;
   }
 
   async function handleSubmit(e) {
-    e.preventDefault()
-    setError(null)
-    setSubmitting(true)
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
-    setSubmitting(false)
+    e.preventDefault();
+    setError(null);
+    setSubmitting(true);
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    setSubmitting(false);
     if (signInError) {
-      setError(signInError.message)
+      setError(signInError.message);
     }
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-4">
       <div className="w-full max-w-sm rounded-lg border border-neutral-200 bg-neutral-0 p-8 shadow-sm">
-        <h1 className="text-lg font-semibold text-neutral-900">Sign in to QuoteForge</h1>
-        <p className="mt-1 text-sm text-neutral-500">Manage quotes, customers, and invoices.</p>
+        <h1 className="text-lg font-semibold text-neutral-900">
+          Sign in to QuoteForge
+        </h1>
+        <p className="mt-1 text-sm text-neutral-500">
+          Manage quotes, customers, and invoices.
+        </p>
 
         {sessionExpired && (
-          <div className="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800" role="alert">
+          <div
+            className="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800"
+            role="alert"
+          >
             Your session has expired — please log in again.
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
           <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-neutral-700">
+            <label
+              htmlFor="email"
+              className="mb-1 block text-sm font-medium text-neutral-700"
+            >
               Email
             </label>
             <Input
@@ -62,7 +77,10 @@ export function Login() {
             />
           </div>
           <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium text-neutral-700">
+            <label
+              htmlFor="password"
+              className="mb-1 block text-sm font-medium text-neutral-700"
+            >
               Password
             </label>
             <Input
@@ -76,10 +94,10 @@ export function Login() {
           </div>
           <FieldError message={error ?? undefined} />
           <Button type="submit" className="w-full" disabled={submitting}>
-            {submitting ? 'Signing in…' : 'Sign in'}
+            {submitting ? "Signing in…" : "Sign in"}
           </Button>
         </form>
       </div>
     </div>
-  )
+  );
 }

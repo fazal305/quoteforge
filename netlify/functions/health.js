@@ -10,10 +10,10 @@ export default async (_req, _context) => {
       hasSupabaseServiceKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
       hasOpenRouterKey: Boolean(process.env.QUOTEFORGE_AI_KEY),
     }),
-    { headers: { 'content-type': 'application/json' } }
-  )
-}
+    { headers: { "content-type": "application/json" } },
+  );
+};
 
 export const config = {
-  path: '/api/health',
-}
+  path: "/api/health",
+};

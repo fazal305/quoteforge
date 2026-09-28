@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from "@supabase/supabase-js";
 
 /**
  * Service-role Supabase client for use ONLY inside Netlify Functions.
@@ -8,14 +8,16 @@ import { createClient } from '@supabase/supabase-js'
  * validating a public quote token, or checking the caller's JWT/org).
  */
 export function getSupabaseAdmin() {
-  const url = process.env.SUPABASE_URL
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const url = process.env.SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !serviceRoleKey) {
-    throw new Error('Missing SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY environment variables.')
+    throw new Error(
+      "Missing SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY environment variables.",
+    );
   }
 
   return createClient(url, serviceRoleKey, {
     auth: { persistSession: false },
-  })
+  });
 }

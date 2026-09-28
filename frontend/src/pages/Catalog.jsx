@@ -1,26 +1,31 @@
-import { useState } from 'react'
-import { PageHeader, EmptyState } from '@/components/ui/EmptyState'
-import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { CatalogItemFormModal } from '@/components/catalog/CatalogItemFormModal'
-import { useCatalogItems, useCreateCatalogItem, useUpdateCatalogItem, useDeleteCatalogItem } from '@/api/catalog'
-import { useProfile } from '@/api/organization'
-import { formatMoney } from '@/lib/money'
+import { useState } from "react";
+import { PageHeader, EmptyState } from "@/components/ui/EmptyState";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { CatalogItemFormModal } from "@/components/catalog/CatalogItemFormModal";
+import {
+  useCatalogItems,
+  useCreateCatalogItem,
+  useUpdateCatalogItem,
+  useDeleteCatalogItem,
+} from "@/api/catalog";
+import { useProfile } from "@/api/organization";
+import { formatMoney } from "@/lib/money";
 
 export function Catalog() {
-  const [search, setSearch] = useState('')
-  const { data: profile } = useProfile()
-  const { data: items, isLoading, error } = useCatalogItems(search)
-  const createItem = useCreateCatalogItem()
-  const updateItem = useUpdateCatalogItem()
-  const deleteItem = useDeleteCatalogItem()
+  const [search, setSearch] = useState("");
+  const { data: profile } = useProfile();
+  const { data: items, isLoading, error } = useCatalogItems(search);
+  const createItem = useCreateCatalogItem();
+  const updateItem = useUpdateCatalogItem();
+  const deleteItem = useDeleteCatalogItem();
 
-  const [modalOpen, setModalOpen] = useState(false)
-  const [editing, setEditing] = useState(null)
-  const [deleting, setDeleting] = useState(null)
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editing, setEditing] = useState(null);
+  const [deleting, setDeleting] = useState(null);
 
-  const currency = profile?.organization.currency ?? 'PKR'
+  const currency = profile?.organization.currency ?? "PKR";
 
   async function handleSubmit(values) {
     const cleaned = {
@@ -32,19 +37,22 @@ export function Catalog() {
       default_price: values.default_price,
       tax_rate: values.tax_rate,
       active: values.active,
-    }
+    };
     if (editing) {
-      await updateItem.mutateAsync({ id: editing.id, updates: cleaned })
+      await updateItem.mutateAsync({ id: editing.id, updates: cleaned });
     } else if (profile) {
-      await createItem.mutateAsync({ ...cleaned, organization_id: profile.organization.id })
+      await createItem.mutateAsync({
+        ...cleaned,
+        organization_id: profile.organization.id,
+      });
     }
-    setModalOpen(false)
+    setModalOpen(false);
   }
 
   async function handleDelete() {
-    if (!deleting) return
-    await deleteItem.mutateAsync(deleting.id)
-    setDeleting(null)
+    if (!deleting) return;
+    await deleteItem.mutateAsync(deleting.id);
+    setDeleting(null);
   }
 
   return (
@@ -56,8 +64,8 @@ export function Catalog() {
           <Button
             size="sm"
             onClick={() => {
-              setEditing(null)
-              setModalOpen(true)
+              setEditing(null);
+              setModalOpen(true);
             }}
           >
             New item
@@ -67,21 +75,33 @@ export function Catalog() {
 
       <div className="p-6">
         <div className="mb-4 max-w-sm">
-          <Input placeholder="Search catalog…" value={search} onChange={(e) => setSearch(e.target.value)} aria-label="Search catalog" />
+          <Input
+            placeholder="Search catalog…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            aria-label="Search catalog"
+          />
         </div>
 
-        {isLoading && <div className="p-6 text-sm text-neutral-500">Loading catalog…</div>}
+        {isLoading && (
+          <div className="p-6 text-sm text-neutral-500">Loading catalog…</div>
+        )}
         {error && (
-          <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
+          <div
+            className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+            role="alert"
+          >
             Failed to load catalog: {error.message}
           </div>
         )}
 
         {!isLoading && !error && items?.length === 0 && (
           <EmptyState
-            title={search ? 'No matching items' : 'No catalog items yet'}
+            title={search ? "No matching items" : "No catalog items yet"}
             description={
-              search ? 'Try a different search term.' : 'Add products or services so they can be selected directly in the quote builder.'
+              search
+                ? "Try a different search term."
+                : "Add products or services so they can be selected directly in the quote builder."
             }
           />
         )}
@@ -102,28 +122,50 @@ export function Catalog() {
               </thead>
               <tbody>
                 {items.map((item) => (
-                  <tr key={item.id} className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50">
-                    <td className="px-4 py-2.5 font-medium text-neutral-900">{item.name}</td>
-                    <td className="px-4 py-2.5 text-neutral-600">{item.type === 'PRODUCT' ? 'Product' : 'Service'}</td>
-                    <td className="px-4 py-2.5 text-neutral-600">{item.unit}</td>
-                    <td className="px-4 py-2.5 text-neutral-600">{formatMoney(item.default_price, currency)}</td>
-                    <td className="px-4 py-2.5 text-neutral-600">{item.tax_rate}%</td>
+                  <tr
+                    key={item.id}
+                    className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50"
+                  >
+                    <td className="px-4 py-2.5 font-medium text-neutral-900">
+                      {item.name}
+                    </td>
+                    <td className="px-4 py-2.5 text-neutral-600">
+                      {item.type === "PRODUCT" ? "Product" : "Service"}
+                    </td>
+                    <td className="px-4 py-2.5 text-neutral-600">
+                      {item.unit}
+                    </td>
+                    <td className="px-4 py-2.5 text-neutral-600">
+                      {formatMoney(item.default_price, currency)}
+                    </td>
+                    <td className="px-4 py-2.5 text-neutral-600">
+                      {item.tax_rate}%
+                    </td>
                     <td className="px-4 py-2.5">
-                      <span className={item.active ? 'text-status-approved' : 'text-neutral-400'}>
-                        {item.active ? 'Active' : 'Inactive'}
+                      <span
+                        className={
+                          item.active
+                            ? "text-status-approved"
+                            : "text-neutral-400"
+                        }
+                      >
+                        {item.active ? "Active" : "Inactive"}
                       </span>
                     </td>
                     <td className="px-4 py-2.5 text-right">
                       <button
                         onClick={() => {
-                          setEditing(item)
-                          setModalOpen(true)
+                          setEditing(item);
+                          setModalOpen(true);
                         }}
                         className="mr-3 text-brand-600 hover:underline"
                       >
                         Edit
                       </button>
-                      <button onClick={() => setDeleting(item)} className="text-red-600 hover:underline">
+                      <button
+                        onClick={() => setDeleting(item)}
+                        className="text-red-600 hover:underline"
+                      >
                         Delete
                       </button>
                     </td>
@@ -154,5 +196,5 @@ export function Catalog() {
         loading={deleteItem.isPending}
       />
     </div>
-  )
+  );
 }

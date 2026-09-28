@@ -1,23 +1,31 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { PageHeader, EmptyState } from '@/components/ui/EmptyState'
-import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
-import { StatusBadge } from '@/components/ui/StatusBadge'
-import { useQuotes } from '@/api/quotes'
-import { useProfile } from '@/api/organization'
-import { formatMoney } from '@/lib/money'
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { PageHeader, EmptyState } from "@/components/ui/EmptyState";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { StatusBadge } from "@/components/ui/StatusBadge";
+import { useQuotes } from "@/api/quotes";
+import { useProfile } from "@/api/organization";
+import { formatMoney } from "@/lib/money";
 
 const STATUS_FILTERS = [
-  'ALL', 'DRAFT', 'SENT', 'VIEWED', 'APPROVED', 'REJECTED', 'CHANGE_REQUESTED', 'EXPIRED', 'CONVERTED',
-]
+  "ALL",
+  "DRAFT",
+  "SENT",
+  "VIEWED",
+  "APPROVED",
+  "REJECTED",
+  "CHANGE_REQUESTED",
+  "EXPIRED",
+  "CONVERTED",
+];
 
 export function Quotes() {
-  const [search, setSearch] = useState('')
-  const [status, setStatus] = useState('ALL')
-  const { data: profile } = useProfile()
-  const { data: quotes, isLoading, error } = useQuotes({ search, status })
-  const currency = profile?.organization.currency ?? 'PKR'
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("ALL");
+  const { data: profile } = useProfile();
+  const { data: quotes, isLoading, error } = useQuotes({ search, status });
+  const currency = profile?.organization.currency ?? "PKR";
 
   return (
     <div>
@@ -34,7 +42,12 @@ export function Quotes() {
       <div className="p-6">
         <div className="mb-4 flex flex-wrap items-center gap-3">
           <div className="max-w-sm flex-1">
-            <Input placeholder="Search by quote number…" value={search} onChange={(e) => setSearch(e.target.value)} aria-label="Search quotes" />
+            <Input
+              placeholder="Search by quote number…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              aria-label="Search quotes"
+            />
           </div>
           <select
             value={status}
@@ -44,15 +57,20 @@ export function Quotes() {
           >
             {STATUS_FILTERS.map((s) => (
               <option key={s} value={s}>
-                {s === 'ALL' ? 'All statuses' : s.replace('_', ' ')}
+                {s === "ALL" ? "All statuses" : s.replace("_", " ")}
               </option>
             ))}
           </select>
         </div>
 
-        {isLoading && <div className="p-6 text-sm text-neutral-500">Loading quotes…</div>}
+        {isLoading && (
+          <div className="p-6 text-sm text-neutral-500">Loading quotes…</div>
+        )}
         {error && (
-          <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
+          <div
+            className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+            role="alert"
+          >
             Failed to load quotes: {error.message}
           </div>
         )}
@@ -83,18 +101,35 @@ export function Quotes() {
               </thead>
               <tbody>
                 {quotes.map((q) => (
-                  <tr key={q.id} className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50">
+                  <tr
+                    key={q.id}
+                    className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50"
+                  >
                     <td className="px-4 py-2.5 font-medium text-neutral-900">
-                      <Link to={q.status === 'DRAFT' || q.status === 'CHANGE_REQUESTED' ? `/quotes/${q.id}/edit` : `/quotes/${q.id}`} className="hover:underline">
+                      <Link
+                        to={
+                          q.status === "DRAFT" ||
+                          q.status === "CHANGE_REQUESTED"
+                            ? `/quotes/${q.id}/edit`
+                            : `/quotes/${q.id}`
+                        }
+                        className="hover:underline"
+                      >
                         {q.quote_number}
                       </Link>
                     </td>
-                    <td className="px-4 py-2.5 text-neutral-600">{q.customer?.name ?? '—'}</td>
+                    <td className="px-4 py-2.5 text-neutral-600">
+                      {q.customer?.name ?? "—"}
+                    </td>
                     <td className="px-4 py-2.5">
                       <StatusBadge status={q.status} kind="quote" />
                     </td>
-                    <td className="px-4 py-2.5 text-neutral-600">{formatMoney(q.total, q.currency || currency)}</td>
-                    <td className="px-4 py-2.5 text-neutral-500">{new Date(q.updated_at).toLocaleDateString()}</td>
+                    <td className="px-4 py-2.5 text-neutral-600">
+                      {formatMoney(q.total, q.currency || currency)}
+                    </td>
+                    <td className="px-4 py-2.5 text-neutral-500">
+                      {new Date(q.updated_at).toLocaleDateString()}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -103,5 +138,5 @@ export function Quotes() {
         )}
       </div>
     </div>
-  )
+  );
 }

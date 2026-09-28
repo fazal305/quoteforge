@@ -1,18 +1,18 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from "react";
 
 /**
  * Uses the native <dialog> element: gets focus trapping, Escape-to-close,
  * and top-layer stacking from the browser instead of reimplementing them.
  */
 export function Modal({ open, onClose, title, children }) {
-  const ref = useRef(null)
+  const ref = useRef(null);
 
   useEffect(() => {
-    const dialog = ref.current
-    if (!dialog) return
-    if (open && !dialog.open) dialog.showModal()
-    if (!open && dialog.open) dialog.close()
-  }, [open])
+    const dialog = ref.current;
+    if (!dialog) return;
+    if (open && !dialog.open) dialog.showModal();
+    if (!open && dialog.open) dialog.close();
+  }, [open]);
 
   return (
     <dialog
@@ -36,5 +36,5 @@ export function Modal({ open, onClose, title, children }) {
       </div>
       <div className="px-5 py-4">{children}</div>
     </dialog>
-  )
+  );
 }

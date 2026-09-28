@@ -1,54 +1,56 @@
-import { useCatalogItems } from '@/api/catalog'
-import { calculateLineItem, formatMoney } from '@/lib/money'
-import { Button } from '@/components/ui/Button'
+import { useCatalogItems } from "@/api/catalog";
+import { calculateLineItem, formatMoney } from "@/lib/money";
+import { Button } from "@/components/ui/Button";
 
-let keyCounter = 0
+let keyCounter = 0;
 export function newLineItem() {
-  keyCounter += 1
+  keyCounter += 1;
   return {
     key: `new-${Date.now()}-${keyCounter}`,
     catalog_item_id: null,
-    name: '',
-    description: '',
+    name: "",
+    description: "",
     quantity: 1,
-    unit: 'unit',
+    unit: "unit",
     unit_price: 0,
     discount_percent: 0,
     tax_percent: 0,
-  }
+  };
 }
 
 export function LineItemsEditor({ items, onChange, currency }) {
-  const { data: catalogItems } = useCatalogItems()
+  const { data: catalogItems } = useCatalogItems();
 
   function updateItem(key, patch) {
-    onChange(items.map((item) => (item.key === key ? { ...item, ...patch } : item)))
+    onChange(
+      items.map((item) => (item.key === key ? { ...item, ...patch } : item)),
+    );
   }
 
   function removeItem(key) {
-    onChange(items.filter((item) => item.key !== key))
+    onChange(items.filter((item) => item.key !== key));
   }
 
   function move(key, direction) {
-    const index = items.findIndex((item) => item.key === key)
-    const target = index + direction
-    if (target < 0 || target >= items.length) return
-    const next = [...items]
-    ;[next[index], next[target]] = [next[target], next[index]]
-    onChange(next)
+    const index = items.findIndex((item) => item.key === key);
+    const target = index + direction;
+    if (target < 0 || target >= items.length) return;
+    const next = [...items];
+    [next[index], next[target]] = [next[target], next[index]];
+    onChange(next);
   }
 
   function applyCatalogItem(key, catalogItemId) {
-    const catalogItem = catalogItems?.find((c) => c.id === catalogItemId)
-    if (!catalogItem) return
+    const catalogItem = catalogItems?.find((c) => c.id === catalogItemId);
+    if (!catalogItem) return;
     updateItem(key, {
       catalog_item_id: catalogItem.id,
       name: catalogItem.name,
-      description: catalogItem.description ?? '',
+      description: catalogItem.description ?? "",
       unit: catalogItem.unit,
       unit_price: catalogItem.default_price,
       tax_percent: catalogItem.tax_rate,
-    })
+    });
   }
 
   return (
@@ -63,30 +65,43 @@ export function LineItemsEditor({ items, onChange, currency }) {
               <th className="w-28 px-3 py-2 font-medium">Unit price</th>
               <th className="w-20 px-3 py-2 font-medium">Disc %</th>
               <th className="w-20 px-3 py-2 font-medium">Tax %</th>
-              <th className="w-28 px-3 py-2 text-right font-medium">Line total</th>
+              <th className="w-28 px-3 py-2 text-right font-medium">
+                Line total
+              </th>
               <th className="w-24 px-3 py-2"></th>
             </tr>
           </thead>
           <tbody>
             {items.length === 0 && (
               <tr>
-                <td colSpan={8} className="px-3 py-8 text-center text-neutral-500">
+                <td
+                  colSpan={8}
+                  className="px-3 py-8 text-center text-neutral-500"
+                >
                   No line items yet. Add a product or service below.
                 </td>
               </tr>
             )}
             {items.map((item, index) => {
-              const totals = calculateLineItem(item)
+              const totals = calculateLineItem(item);
               return (
-                <tr key={item.key} className="border-b border-neutral-100 align-top last:border-0">
+                <tr
+                  key={item.key}
+                  className="border-b border-neutral-100 align-top last:border-0"
+                >
                   <td className="px-3 py-2">
                     <select
-                      value={item.catalog_item_id ?? ''}
-                      onChange={(e) => e.target.value && applyCatalogItem(item.key, e.target.value)}
+                      value={item.catalog_item_id ?? ""}
+                      onChange={(e) =>
+                        e.target.value &&
+                        applyCatalogItem(item.key, e.target.value)
+                      }
                       aria-label="Load from catalog"
                       className="mb-1 h-8 w-full rounded border border-neutral-200 bg-neutral-50 px-2 text-xs text-neutral-600"
                     >
-                      <option value="">Custom item (or pick from catalog)</option>
+                      <option value="">
+                        Custom item (or pick from catalog)
+                      </option>
                       {catalogItems?.map((c) => (
                         <option key={c.id} value={c.id}>
                           {c.name}
@@ -95,14 +110,18 @@ export function LineItemsEditor({ items, onChange, currency }) {
                     </select>
                     <input
                       value={item.name}
-                      onChange={(e) => updateItem(item.key, { name: e.target.value })}
+                      onChange={(e) =>
+                        updateItem(item.key, { name: e.target.value })
+                      }
                       placeholder="Item name"
                       aria-label="Item name"
                       className="mb-1 h-8 w-full rounded border border-neutral-300 px-2 text-sm"
                     />
                     <textarea
                       value={item.description}
-                      onChange={(e) => updateItem(item.key, { description: e.target.value })}
+                      onChange={(e) =>
+                        updateItem(item.key, { description: e.target.value })
+                      }
                       placeholder="Description (optional)"
                       aria-label="Item description"
                       rows={2}
@@ -115,7 +134,11 @@ export function LineItemsEditor({ items, onChange, currency }) {
                       min="0"
                       step="0.01"
                       value={item.quantity}
-                      onChange={(e) => updateItem(item.key, { quantity: Number(e.target.value) })}
+                      onChange={(e) =>
+                        updateItem(item.key, {
+                          quantity: Number(e.target.value),
+                        })
+                      }
                       aria-label="Quantity"
                       className="h-8 w-full rounded border border-neutral-300 px-2 text-sm"
                     />
@@ -123,7 +146,9 @@ export function LineItemsEditor({ items, onChange, currency }) {
                   <td className="px-3 py-2">
                     <input
                       value={item.unit}
-                      onChange={(e) => updateItem(item.key, { unit: e.target.value })}
+                      onChange={(e) =>
+                        updateItem(item.key, { unit: e.target.value })
+                      }
                       aria-label="Unit"
                       className="h-8 w-full rounded border border-neutral-300 px-2 text-sm"
                     />
@@ -134,7 +159,11 @@ export function LineItemsEditor({ items, onChange, currency }) {
                       min="0"
                       step="0.01"
                       value={item.unit_price}
-                      onChange={(e) => updateItem(item.key, { unit_price: Number(e.target.value) })}
+                      onChange={(e) =>
+                        updateItem(item.key, {
+                          unit_price: Number(e.target.value),
+                        })
+                      }
                       aria-label="Unit price"
                       className="h-8 w-full rounded border border-neutral-300 px-2 text-sm"
                     />
@@ -146,7 +175,11 @@ export function LineItemsEditor({ items, onChange, currency }) {
                       max="100"
                       step="0.01"
                       value={item.discount_percent}
-                      onChange={(e) => updateItem(item.key, { discount_percent: Number(e.target.value) })}
+                      onChange={(e) =>
+                        updateItem(item.key, {
+                          discount_percent: Number(e.target.value),
+                        })
+                      }
                       aria-label="Discount percent"
                       className="h-8 w-full rounded border border-neutral-300 px-2 text-sm"
                     />
@@ -158,7 +191,11 @@ export function LineItemsEditor({ items, onChange, currency }) {
                       max="100"
                       step="0.01"
                       value={item.tax_percent}
-                      onChange={(e) => updateItem(item.key, { tax_percent: Number(e.target.value) })}
+                      onChange={(e) =>
+                        updateItem(item.key, {
+                          tax_percent: Number(e.target.value),
+                        })
+                      }
                       aria-label="Tax percent"
                       className="h-8 w-full rounded border border-neutral-300 px-2 text-sm"
                     />
@@ -197,16 +234,21 @@ export function LineItemsEditor({ items, onChange, currency }) {
                     </div>
                   </td>
                 </tr>
-              )
+              );
             })}
           </tbody>
         </table>
       </div>
       <div className="border-t border-neutral-200 p-3">
-        <Button type="button" variant="secondary" size="sm" onClick={() => onChange([...items, newLineItem()])}>
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          onClick={() => onChange([...items, newLineItem()])}
+        >
           + Add line item
         </Button>
       </div>
     </div>
-  )
+  );
 }

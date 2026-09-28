@@ -1,9 +1,9 @@
-import { getSupabaseAdmin } from './_lib/supabaseAdmin.js'
+import { getSupabaseAdmin } from "./_lib/supabaseAdmin.js";
 
-const CORS_HEADERS = { 'content-type': 'application/json' }
+const CORS_HEADERS = { "content-type": "application/json" };
 
 function json(body, status = 200) {
-  return new Response(JSON.stringify(body), { status, headers: CORS_HEADERS })
+  return new Response(JSON.stringify(body), { status, headers: CORS_HEADERS });
 }
 
 /**
@@ -16,64 +16,68 @@ function json(body, status = 200) {
  * records are never exposed.
  */
 export default async (req, _context) => {
-  const url = new URL(req.url)
-  const token = url.searchParams.get('token')
+  const url = new URL(req.url);
+  const token = url.searchParams.get("token");
 
   if (!token) {
-    return json({ error: 'Missing token' }, 400)
+    return json({ error: "Missing token" }, 400);
   }
 
-  const admin = getSupabaseAdmin()
+  const admin = getSupabaseAdmin();
 
   const { data: tokenRow, error: tokenError } = await admin
-    .from('quote_public_tokens')
-    .select('quote_id, expires_at')
-    .eq('token', token)
-    .maybeSingle()
+    .from("quote_public_tokens")
+    .select("quote_id, expires_at")
+    .eq("token", token)
+    .maybeSingle();
 
   if (tokenError) {
-    return json({ error: 'Lookup failed' }, 500)
+    return json({ error: "Lookup failed" }, 500);
   }
   if (!tokenRow) {
-    return json({ error: 'Quote not found' }, 404)
+    return json({ error: "Quote not found" }, 404);
   }
   if (tokenRow.expires_at && new Date(tokenRow.expires_at) < new Date()) {
-    return json({ error: 'This link has expired' }, 410)
+    return json({ error: "This link has expired" }, 410);
   }
 
   const { data: quote, error: quoteError } = await admin
-    .from('quotes')
-    .select('*, organization:organizations(*), customer:customers(id, name, company, email)')
-    .eq('id', tokenRow.quote_id)
-    .single()
+    .from("quotes")
+    .select(
+      "*, organization:organizations(*), customer:customers(id, name, company, email)",
+    )
+    .eq("id", tokenRow.quote_id)
+    .single();
 
   if (quoteError || !quote) {
-    return json({ error: 'Quote not found' }, 404)
+    return json({ error: "Quote not found" }, 404);
   }
 
   const { data: items, error: itemsError } = await admin
-    .from('quote_items')
-    .select('name, description, quantity, unit, unit_price, discount_percent, tax_percent, line_total, sort_order')
-    .eq('quote_id', quote.id)
-    .order('sort_order')
+    .from("quote_items")
+    .select(
+      "name, description, quantity, unit, unit_price, discount_percent, tax_percent, line_total, sort_order",
+    )
+    .eq("quote_id", quote.id)
+    .order("sort_order");
 
   if (itemsError) {
-    return json({ error: 'Lookup failed' }, 500)
+    return json({ error: "Lookup failed" }, 500);
   }
 
   // First open: SENT -> VIEWED. Best-effort — a race between two near-
   // simultaneous opens could double-log a VIEWED event, which is a
   // cosmetic activity-feed duplicate, not a correctness issue.
-  if (quote.status === 'SENT') {
-    await admin.rpc('transition_quote_status', {
+  if (quote.status === "SENT") {
+    await admin.rpc("transition_quote_status", {
       p_quote_id: quote.id,
-      p_new_status: 'VIEWED',
-      p_actor_type: 'CUSTOMER',
-      p_actor_label: quote.customer?.name ?? 'Customer',
-      p_message: `${quote.customer?.name ?? 'Customer'} viewed the quote.`,
-      p_event_type: 'VIEWED',
-    })
-    quote.status = 'VIEWED'
+      p_new_status: "VIEWED",
+      p_actor_type: "CUSTOMER",
+      p_actor_label: quote.customer?.name ?? "Customer",
+      p_message: `${quote.customer?.name ?? "Customer"} viewed the quote.`,
+      p_event_type: "VIEWED",
+    });
+    quote.status = "VIEWED";
   }
 
   return json({
@@ -104,10 +108,12 @@ export default async (req, _context) => {
           payment_instructions: quote.organization.payment_instructions,
         }
       : null,
-    customer: quote.customer ? { name: quote.customer.name, company: quote.customer.company } : null,
-  })
-}
+    customer: quote.customer
+      ? { name: quote.customer.name, company: quote.customer.company }
+      : null,
+  });
+};
 
 export const config = {
-  path: '/api/public-quote',
-}
+  path: "/api/public-quote",
+};

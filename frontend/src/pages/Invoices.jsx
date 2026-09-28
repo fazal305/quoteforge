@@ -1,29 +1,45 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { PageHeader, EmptyState } from '@/components/ui/EmptyState'
-import { Input } from '@/components/ui/Input'
-import { StatusBadge } from '@/components/ui/StatusBadge'
-import { useInvoices } from '@/api/invoices'
-import { useProfile } from '@/api/organization'
-import { formatMoney } from '@/lib/money'
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { PageHeader, EmptyState } from "@/components/ui/EmptyState";
+import { Input } from "@/components/ui/Input";
+import { StatusBadge } from "@/components/ui/StatusBadge";
+import { useInvoices } from "@/api/invoices";
+import { useProfile } from "@/api/organization";
+import { formatMoney } from "@/lib/money";
 
-const STATUS_FILTERS = ['ALL', 'DRAFT', 'ISSUED', 'PARTIALLY_PAID', 'PAID', 'OVERDUE', 'CANCELLED']
+const STATUS_FILTERS = [
+  "ALL",
+  "DRAFT",
+  "ISSUED",
+  "PARTIALLY_PAID",
+  "PAID",
+  "OVERDUE",
+  "CANCELLED",
+];
 
 export function Invoices() {
-  const [search, setSearch] = useState('')
-  const [status, setStatus] = useState('ALL')
-  const { data: profile } = useProfile()
-  const { data: invoices, isLoading, error } = useInvoices({ search, status })
-  const currency = profile?.organization.currency ?? 'PKR'
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("ALL");
+  const { data: profile } = useProfile();
+  const { data: invoices, isLoading, error } = useInvoices({ search, status });
+  const currency = profile?.organization.currency ?? "PKR";
 
   return (
     <div>
-      <PageHeader title="Invoices" description="Invoices converted from approved quotes, and payment status." />
+      <PageHeader
+        title="Invoices"
+        description="Invoices converted from approved quotes, and payment status."
+      />
 
       <div className="p-6">
         <div className="mb-4 flex flex-wrap items-center gap-3">
           <div className="max-w-sm flex-1">
-            <Input placeholder="Search by invoice number…" value={search} onChange={(e) => setSearch(e.target.value)} aria-label="Search invoices" />
+            <Input
+              placeholder="Search by invoice number…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              aria-label="Search invoices"
+            />
           </div>
           <select
             value={status}
@@ -33,15 +49,20 @@ export function Invoices() {
           >
             {STATUS_FILTERS.map((s) => (
               <option key={s} value={s}>
-                {s === 'ALL' ? 'All statuses' : s.replace('_', ' ')}
+                {s === "ALL" ? "All statuses" : s.replace("_", " ")}
               </option>
             ))}
           </select>
         </div>
 
-        {isLoading && <div className="p-6 text-sm text-neutral-500">Loading invoices…</div>}
+        {isLoading && (
+          <div className="p-6 text-sm text-neutral-500">Loading invoices…</div>
+        )}
         {error && (
-          <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
+          <div
+            className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+            role="alert"
+          >
             Failed to load invoices: {error.message}
           </div>
         )}
@@ -67,18 +88,32 @@ export function Invoices() {
               </thead>
               <tbody>
                 {invoices.map((inv) => (
-                  <tr key={inv.id} className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50">
+                  <tr
+                    key={inv.id}
+                    className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50"
+                  >
                     <td className="px-4 py-2.5 font-medium text-neutral-900">
-                      <Link to={`/invoices/${inv.id}`} className="hover:underline">
+                      <Link
+                        to={`/invoices/${inv.id}`}
+                        className="hover:underline"
+                      >
                         {inv.invoice_number}
                       </Link>
                     </td>
-                    <td className="px-4 py-2.5 text-neutral-600">{inv.customer?.name ?? '—'}</td>
+                    <td className="px-4 py-2.5 text-neutral-600">
+                      {inv.customer?.name ?? "—"}
+                    </td>
                     <td className="px-4 py-2.5">
                       <StatusBadge status={inv.status} kind="invoice" />
                     </td>
-                    <td className="px-4 py-2.5 text-neutral-600">{formatMoney(inv.total, inv.currency || currency)}</td>
-                    <td className="px-4 py-2.5 text-neutral-500">{inv.due_date ? new Date(inv.due_date).toLocaleDateString() : '—'}</td>
+                    <td className="px-4 py-2.5 text-neutral-600">
+                      {formatMoney(inv.total, inv.currency || currency)}
+                    </td>
+                    <td className="px-4 py-2.5 text-neutral-500">
+                      {inv.due_date
+                        ? new Date(inv.due_date).toLocaleDateString()
+                        : "—"}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -87,5 +122,5 @@ export function Invoices() {
         )}
       </div>
     </div>
-  )
+  );
 }

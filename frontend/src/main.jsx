@@ -1,10 +1,10 @@
-import { StrictMode, useEffect } from 'react'
-import { createRoot } from 'react-dom/client'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import './index.css'
-import '@/store/theme' // applies the dark/light class before first paint
-import { App } from './App'
-import { useAuthStore } from '@/store/auth'
+import { StrictMode, useEffect } from "react";
+import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "./index.css";
+import "@/store/theme"; // applies the dark/light class before first paint
+import { App } from "./App";
+import { useAuthStore } from "@/store/auth";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,23 +13,23 @@ const queryClient = new QueryClient({
       retry: 1,
     },
   },
-})
+});
 
 function Root() {
-  const initialize = useAuthStore((s) => s.initialize)
+  const initialize = useAuthStore((s) => s.initialize);
   useEffect(() => {
-    initialize()
-  }, [initialize])
+    initialize();
+  }, [initialize]);
 
   return (
     <QueryClientProvider client={queryClient}>
       <App />
     </QueryClientProvider>
-  )
+  );
 }
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Root />
-  </StrictMode>
-)
+  </StrictMode>,
+);

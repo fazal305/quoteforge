@@ -15,5 +15,5 @@ export default function handler(_req, res) {
     hasSupabaseUrl: Boolean(process.env.SUPABASE_URL),
     hasSupabaseServiceKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
     hasOpenRouterKey: Boolean(process.env.QUOTEFORGE_AI_KEY),
-  })
+  });
 }

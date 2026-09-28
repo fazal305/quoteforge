@@ -5,21 +5,31 @@ export function EmptyState({ title, description, action }) {
       <p className="mt-1 max-w-sm text-sm text-neutral-500">{description}</p>
       {action && <div className="mt-4">{action}</div>}
     </div>
-  )
+  );
 }
 
-export function PageHeader({ title, description, action, liveDescription = false }) {
+export function PageHeader({
+  title,
+  description,
+  action,
+  liveDescription = false,
+}) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-200 bg-neutral-0 px-4 py-4 sm:px-6">
       <div className="min-w-0">
-        <h1 className="truncate text-base font-semibold text-neutral-900">{title}</h1>
+        <h1 className="truncate text-base font-semibold text-neutral-900">
+          {title}
+        </h1>
         {description && (
-          <p className="mt-0.5 text-sm text-neutral-500" aria-live={liveDescription ? 'polite' : undefined}>
+          <p
+            className="mt-0.5 text-sm text-neutral-500"
+            aria-live={liveDescription ? "polite" : undefined}
+          >
             {description}
           </p>
         )}
       </div>
       {action}
     </div>
-  )
+  );
 }

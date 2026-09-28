@@ -1,42 +1,43 @@
 const QUOTE_LABELS = {
-  DRAFT: 'Draft',
-  SENT: 'Sent',
-  VIEWED: 'Viewed',
-  APPROVED: 'Approved',
-  REJECTED: 'Rejected',
-  CHANGE_REQUESTED: 'Changes requested',
-  EXPIRED: 'Expired',
-  CONVERTED: 'Converted',
-}
+  DRAFT: "Draft",
+  SENT: "Sent",
+  VIEWED: "Viewed",
+  APPROVED: "Approved",
+  REJECTED: "Rejected",
+  CHANGE_REQUESTED: "Changes requested",
+  EXPIRED: "Expired",
+  CONVERTED: "Converted",
+};
 
 const INVOICE_LABELS = {
-  DRAFT: 'Draft',
-  ISSUED: 'Issued',
-  PARTIALLY_PAID: 'Partially paid',
-  PAID: 'Paid',
-  OVERDUE: 'Overdue',
-  CANCELLED: 'Cancelled',
-}
+  DRAFT: "Draft",
+  ISSUED: "Issued",
+  PARTIALLY_PAID: "Partially paid",
+  PAID: "Paid",
+  OVERDUE: "Overdue",
+  CANCELLED: "Cancelled",
+};
 
 const STATUS_COLOR_VAR = {
-  DRAFT: 'draft',
-  SENT: 'sent',
-  VIEWED: 'viewed',
-  APPROVED: 'approved',
-  REJECTED: 'rejected',
-  CHANGE_REQUESTED: 'changes',
-  EXPIRED: 'expired',
-  CONVERTED: 'converted',
-  ISSUED: 'sent',
-  PARTIALLY_PAID: 'changes',
-  PAID: 'paid',
-  OVERDUE: 'overdue',
-  CANCELLED: 'rejected',
-}
+  DRAFT: "draft",
+  SENT: "sent",
+  VIEWED: "viewed",
+  APPROVED: "approved",
+  REJECTED: "rejected",
+  CHANGE_REQUESTED: "changes",
+  EXPIRED: "expired",
+  CONVERTED: "converted",
+  ISSUED: "sent",
+  PARTIALLY_PAID: "changes",
+  PAID: "paid",
+  OVERDUE: "overdue",
+  CANCELLED: "rejected",
+};
 
-export function StatusBadge({ status, kind = 'quote' }) {
-  const label = kind === 'quote' ? QUOTE_LABELS[status] : INVOICE_LABELS[status]
-  const colorKey = STATUS_COLOR_VAR[status]
+export function StatusBadge({ status, kind = "quote" }) {
+  const label =
+    kind === "quote" ? QUOTE_LABELS[status] : INVOICE_LABELS[status];
+  const colorKey = STATUS_COLOR_VAR[status];
 
   return (
     <span
@@ -54,5 +55,5 @@ export function StatusBadge({ status, kind = 'quote' }) {
       />
       {label}
     </span>
-  )
+  );
 }

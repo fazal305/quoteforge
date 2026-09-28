@@ -1,18 +1,18 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { AppShell } from '@/components/layout/AppShell'
-import { ProtectedRoute } from '@/components/layout/ProtectedRoute'
-import { Login } from '@/pages/Login'
-import { Dashboard } from '@/pages/Dashboard'
-import { Quotes } from '@/pages/Quotes'
-import { QuoteBuilder } from '@/pages/QuoteBuilder'
-import { QuoteView } from '@/pages/QuoteView'
-import { Customers } from '@/pages/Customers'
-import { Catalog } from '@/pages/Catalog'
-import { Invoices } from '@/pages/Invoices'
-import { InvoiceView } from '@/pages/InvoiceView'
-import { Settings } from '@/pages/Settings'
-import { PublicQuote } from '@/pages/PublicQuote'
-import { NotFound } from '@/pages/NotFound'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AppShell } from "@/components/layout/AppShell";
+import { ProtectedRoute } from "@/components/layout/ProtectedRoute";
+import { Login } from "@/pages/Login";
+import { Dashboard } from "@/pages/Dashboard";
+import { Quotes } from "@/pages/Quotes";
+import { QuoteBuilder } from "@/pages/QuoteBuilder";
+import { QuoteView } from "@/pages/QuoteView";
+import { Customers } from "@/pages/Customers";
+import { Catalog } from "@/pages/Catalog";
+import { Invoices } from "@/pages/Invoices";
+import { InvoiceView } from "@/pages/InvoiceView";
+import { Settings } from "@/pages/Settings";
+import { PublicQuote } from "@/pages/PublicQuote";
+import { NotFound } from "@/pages/NotFound";
 
 export function App() {
   return (
@@ -39,5 +39,5 @@ export function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }

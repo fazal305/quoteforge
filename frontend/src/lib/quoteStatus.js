@@ -4,12 +4,12 @@
 // can disable actions that the backend would reject anyway — the backend
 // is the actual source of truth, not this map.
 export const QUOTE_TRANSITIONS = {
-  DRAFT: ['SENT'],
-  SENT: ['VIEWED', 'APPROVED', 'REJECTED', 'CHANGE_REQUESTED', 'EXPIRED'],
-  VIEWED: ['APPROVED', 'REJECTED', 'CHANGE_REQUESTED', 'EXPIRED'],
-  CHANGE_REQUESTED: ['SENT'],
-  APPROVED: ['CONVERTED'],
+  DRAFT: ["SENT"],
+  SENT: ["VIEWED", "APPROVED", "REJECTED", "CHANGE_REQUESTED", "EXPIRED"],
+  VIEWED: ["APPROVED", "REJECTED", "CHANGE_REQUESTED", "EXPIRED"],
+  CHANGE_REQUESTED: ["SENT"],
+  APPROVED: ["CONVERTED"],
   REJECTED: [],
   EXPIRED: [],
   CONVERTED: [],
-}
+};

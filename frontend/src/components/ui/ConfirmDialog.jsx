@@ -1,11 +1,11 @@
-import { Modal } from '@/components/ui/Modal'
-import { Button } from '@/components/ui/Button'
+import { Modal } from "@/components/ui/Modal";
+import { Button } from "@/components/ui/Button";
 
 export function ConfirmDialog({
   open,
   title,
   description,
-  confirmLabel = 'Confirm',
+  confirmLabel = "Confirm",
   danger,
   onConfirm,
   onClose,
@@ -18,10 +18,14 @@ export function ConfirmDialog({
         <Button variant="secondary" onClick={onClose}>
           Cancel
         </Button>
-        <Button variant={danger ? 'danger' : 'primary'} onClick={onConfirm} disabled={loading}>
-          {loading ? 'Working…' : confirmLabel}
+        <Button
+          variant={danger ? "danger" : "primary"}
+          onClick={onConfirm}
+          disabled={loading}
+        >
+          {loading ? "Working…" : confirmLabel}
         </Button>
       </div>
     </Modal>
-  )
+  );
 }
