@@ -5,7 +5,7 @@ send a secure public link to customers (no account required), customers
 approve / reject / request changes, and approved quotes convert into invoices
 with payment tracking.
 
-**Live demo:** [quoteforge-604.netlify.app](https://quoteforge-604.netlify.app)
+**Live demo:** [quoteforge-fz17.vercel.app](https://quoteforge-fz17.vercel.app)
 — log in with the [demo credentials](#4-demo-login-credentials-development-only) below. This is a working development deployment seeded with dummy data, not a real business.
 
 **Status:** Phases 1–4 complete (foundation, core business features,
