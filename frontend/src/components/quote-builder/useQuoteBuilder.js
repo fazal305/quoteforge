@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { calculateQuoteTotals } from "@/lib/money";
 import { useSaveQuote } from "@/api/quotes";
 import { newLineItem } from "./LineItemsEditor";
+import { consumeCalculatorHandoff } from "@/features/calculator-suite/handoff";
 
 const EMPTY_STATE = {
   customerId: null,
@@ -58,6 +59,27 @@ export function useQuoteBuilder(params) {
   // (below) rather than risk showing an unrelated quote's local backup.
   const [state, setState] = useState(() => {
     if (existingQuoteId) return EMPTY_STATE;
+
+    // A calculated estimate sent over from the pricing calculator takes
+    // priority — it's the result of an explicit "Send to QuoteForge" click
+    // moments ago, and consuming it clears it so it won't resurface later.
+    const handoff = consumeCalculatorHandoff();
+    if (handoff) {
+      return {
+        ...EMPTY_STATE,
+        items: [
+          {
+            ...newLineItem(),
+            name: handoff.name,
+            description: handoff.description,
+            quantity: 1,
+            unit_price: handoff.unitPrice,
+          },
+        ],
+        notes: handoff.notes,
+      };
+    }
+
     const saved =
       typeof window !== "undefined"
         ? localStorage.getItem(storageKey("new"))

@@ -12,6 +12,13 @@ with payment tracking.
 public customer quote/approval workflow, invoice conversion and payment
 tracking). See Roadmap below.
 
+**Pricing calculator:** a standalone estimate tool — hourly rate, project
+scope, feature-based pricing, basic/standard/premium comparisons, an AI
+pricing assistant, and currency conversion — lives at `/calculator`, no
+login required (merged in from the former `quote-rate` project). Results
+can be sent straight into a real quote via a "Send to QuoteForge" button,
+which hands the estimate to the quote builder once you're logged in.
+
 ## Product overview
 
 The core workflow:

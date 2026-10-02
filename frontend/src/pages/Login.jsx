@@ -12,6 +12,11 @@ export function Login() {
   const [sessionExpired] = useState(() =>
     Boolean(location.state?.sessionExpired),
   );
+  // Supports the pricing-calculator handoff: /login?next=/quotes/new sends
+  // the user back to pick up their in-progress estimate after signing in.
+  const nextPath = new URLSearchParams(location.search).get("next");
+  const redirectTo =
+    nextPath && nextPath.startsWith("/") ? nextPath : "/";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -23,7 +28,7 @@ export function Login() {
   }, []);
 
   if (status === "authenticated") {
-    return <Navigate to="/" replace />;
+    return <Navigate to={redirectTo} replace />;
   }
 
   async function handleSubmit(e) {

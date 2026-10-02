@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { to: "/invoices", label: "Invoices" },
   { to: "/customers", label: "Customers" },
   { to: "/catalog", label: "Catalog" },
+  { to: "/calculator", label: "Pricing Calculator" },
   { to: "/settings", label: "Settings" },
 ];
 
