@@ -273,3 +273,11 @@ that:
   quote's database ID.
 - File uploads (logo, attachments) will be validated for type and size
   before storage (Phase 2/6) — not yet implemented.
+
+## License
+
+Free for personal, educational, and noncommercial use under the [PolyForm Noncommercial License 1.0.0](LICENSE).
+
+Commercial use requires a paid commercial license. Contact fazalabbas2002@gmail.com.
+
+Versions up to and including `last-mit` were released under the MIT License and remain available under MIT.

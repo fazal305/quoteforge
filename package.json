@@ -1,6 +1,7 @@
 {
   "name": "quoteforge-functions",
   "version": "1.0.0",
+  "license": "PolyForm-Noncommercial-1.0.0",
   "private": true,
   "description": "QuoteForge Netlify Functions (backend API).",
   "type": "module",
