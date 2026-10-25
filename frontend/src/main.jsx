@@ -5,6 +5,8 @@ import "./index.css";
 import "@/store/theme"; // applies the dark/light class before first paint
 import { App } from "./App";
 import { useAuthStore } from "@/store/auth";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,5 +33,7 @@ function Root() {
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Root />
+    <Analytics />
+    <SpeedInsights />
   </StrictMode>,
 );
